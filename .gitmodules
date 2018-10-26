@@ -1,0 +1,6 @@
+[submodule "wp-content/themes/long-story-press-headless"]
+	path = wp-content/themes/long-story-press-headless
+	url = https://github.com/LongStoryMedia/long-story-press-headless.git
+[submodule "LSP_UI"]
+	path = LSP_UI
+	url = https://github.com/LongStoryMedia/LSP_UI.git
