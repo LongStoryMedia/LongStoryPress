@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "start": "SET NODE_ENV=development&& node -r dotenv/config ../LSP_UI/scripts/start.js",
+    "build": "node -r dotenv/config ../LSP_UI/scripts/build.js",
+    "test": "node -r dotenv/config ../LSP_UI/scripts/test.js --env=jsdom"
+  },
+  "private": true
+}

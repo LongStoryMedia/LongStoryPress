@@ -54,5 +54,7 @@ wp_super_admin
 **.net
 **.io
 
+!/example2.com
+!/example.com
 !/example.com/*
 !/example2.com/*
