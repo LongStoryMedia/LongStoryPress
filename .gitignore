@@ -38,8 +38,8 @@ wp-includes**
 /sitemap.xml
 /sitemap.xml.gz
 
-ui
-**dev**
+/ui/
+/dev/
 **node_modules**
 **unused**
 **dist**
@@ -47,3 +47,12 @@ ui
 server_names
 
 wp_super_admin
+
+
+**.com
+**.org
+**.net
+**.io
+
+!/example.com/*
+!/example2.com/*
