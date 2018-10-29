@@ -1,9 +1,9 @@
 {
   "scripts": {
-    "start": "node ../LSP_UI/scripts/start.js",
-    "build": "node ../LSP_UI/scripts/build.js",
-    "test": "node ../LSP_UI/scripts/test.js --env=jsdom",
-    "clean": "node ../LSP_UI/scripts/clean.js"
+    "start": "node -r dotenv/config ../LSP_UI/scripts/start.js",
+    "build": "node -r dotenv/config ../LSP_UI/scripts/build.js",
+    "test": "node -r dotenv/config ../LSP_UI/scripts/test.js --env=jsdom",
+    "clean": "node -r dotenv/config ../LSP_UI/scripts/clean.js"
   },
   "private": true
 }
