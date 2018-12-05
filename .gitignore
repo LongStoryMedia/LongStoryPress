@@ -2,6 +2,12 @@
 *.sh
 *.env*
 *.lock
+*.sql
+*.csv
+*.txt
+*.py
+*.phar
+*.cache
 
 wp-config.php
 wp-blog-header.php
@@ -18,6 +24,7 @@ wp-settings.php
 wp-signup.php
 wp-trackback.php
 xmlrpc.php
+RoboFile.php
 wp-content/advanced-cache.php
 wp-content/backup-db/
 wp-content/backups/
@@ -29,14 +36,17 @@ wp-content/plugins/
 wp-content/mu-plugins/
 wp-content/wp-cache-config.php
 wp-content/plugins/hello.php
+wp-content/*
 wp-admin**
 wp-includes**
+!wp-content/themes**
 
 /.htaccess
 /license.txt
 /readme.html
 /sitemap.xml
 /sitemap.xml.gz
+/backups-migration
 
 /ui/
 /dev/
@@ -54,7 +64,9 @@ wp_super_admin
 **.net
 **.io
 
-!/example2.com
-!/example.com
-!/example.com/*
-!/example2.com/*
+!/LSP_UI/example2.com
+!/LSP_UI/example.com
+!/LSP_UI/example.com/*
+!/LSP_UI/example2.com/*
+!/wp-content/plugins/headless-slider-block
+!/wp-content/plugins/headless-slider-block/*
