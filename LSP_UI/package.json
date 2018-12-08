@@ -2,10 +2,10 @@
   "name": "LSP_UI",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/LongStoryMedia/LSP_UI.git",
-  "author": "<scott@longstorymedia.com>",
+  "repository": "https://github.com/LongStoryMedia/LongStoryPress.git",
+  "author": "LongStoryMedia <longstoryscott@gmail.com>",
   "license": "MIT",
-  "description": "",
+  "description": "A multisite react app to be paired with a multisite WordPress installation running the long-story-press-headless theme.",
   "private": true,
   "eslintConfig": {
     "extends": "react-app",
