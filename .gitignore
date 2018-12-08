@@ -48,25 +48,30 @@ wp-includes**
 /sitemap.xml.gz
 /backups-migration
 
-/ui/
-/dev/
 **node_modules**
 **unused**
 **dist**
+**node_modules**
+**/server/**
+**/public/**
+**logo.*
+**server.conf
 
 server_names
-
-wp_super_admin
-
+lsp
 
 **.com
 **.org
 **.net
 **.io
 
-!/LSP_UI/example2.com
-!/LSP_UI/example.com
-!/LSP_UI/example.com/*
-!/LSP_UI/example2.com/*
-!/wp-content/plugins/headless-slider-block
-!/wp-content/plugins/headless-slider-block/*
+**.com/.env*
+**.org/.env*
+**.net/.env*
+**.io/.env*
+
+!example.com
+!example.com/.env*
+!**/data-server/**
+!**/render-server/**
+!.env.development
