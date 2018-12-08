@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "start": "node -r dotenv/config ../scripts/start.js",
+    "build": "node -r dotenv/config ../scripts/build.js",
+    "test": "node -r dotenv/config ../scripts/test.js --env=jsdom",
+    "clean": "node -r dotenv/config ../scripts/clean.js"
+  },
+  "private": true
+}

@@ -1,0 +1,39 @@
+#lsp-form>section {
+    margin: .5em;
+    padding: 1.5em;
+    display: inline-block;
+    -webkit-box-shadow: 0px 0px 20px -7px #2e2e2e;
+    box-shadow: 0px 0px 20px -7px #2e2e2e;
+}
+
+#lsp-form>section>.text-input {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+#lsp-form>section>div label {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    padding-right: 3em;
+    border-bottom: 1px #9e9e9e dashed;
+    -webkit-align-self: flex-end;
+    -ms-flex-item-align: end;
+    align-self: flex-end;
+}
+
+#lsp-form>section>div input {
+    border-bottom: 1px #9e9e9e dashed;
+}
+
+#lsp-form>section>div .known-data {
+  font-size: 1.15em;
+}
+
+#lsp-form>section>div .label {
+    font-size: 1.15em;
+    font-weight: bold;
+}

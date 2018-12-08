@@ -1,0 +1,18 @@
+#container {
+    display: grid;
+    grid-template-rows: minmax(3.6em, auto) auto 1fr auto;
+    grid-template-columns: 1fr;
+    min-height: 100vh;
+    max-width: 100%;
+    z-index: 1;
+
+    .Wrapper {
+        margin: 0 auto;
+        max-width: 1200px;
+        width: 100%;
+        padding: 1em;
+        grid-area: 3/1/4/3;
+        overflow: hidden;
+        font-size: .85em;
+    }
+}

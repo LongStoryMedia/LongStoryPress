@@ -1,0 +1,69 @@
+@import "../static/_required.scss";
+
+.contentBox {
+    align-items: center;
+    padding: 0.75em;
+    background-color: $white;
+    display: grid;
+    max-width: 300px;
+
+    .title {
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        text-transform: uppercase;
+        text-align: center;
+        @include underline;
+        @include transition;
+        max-height: 100%;
+        max-width: 100%;
+
+        &.placeHolder {
+            filter: blur(5px);
+        }
+
+        span {
+            background-color: transparentize($lightgrey, .45);
+            padding: 0.25em;
+        }
+
+        &:first-child:first-letter {
+            color: $black;
+            @include threeDtxt;
+            font-family: $f2;
+            width: 6em;
+        }
+
+    }
+
+    .content {
+        padding: 0.35em;
+        display: inline-block;
+
+        a {
+            font-family: $f1;
+            background-color: transparentize($white, .65);
+            @include transition;
+            text-decoration: none;
+            color: $green;
+            border-bottom: 1px solid darken(transparentize($green, .5), 10%);
+
+            &:hover {
+                color: $orange;
+                border-bottom-color: $black;
+                background-color: transparentize($black, .85);
+            }
+        }
+
+        &:first-child:first-letter {
+            font-size: 1.25em;
+        }
+
+        .sectionImage {
+            max-height: 7em;
+        }
+    }
+}

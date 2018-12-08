@@ -1,0 +1,54 @@
+@import "../static/_required.scss";
+
+.postList {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+
+    .listItem {
+        text-decoration: none;
+    }
+}
+
+.post {
+    width: 100%;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    grid-template-columns: 1fr auto;
+
+    .featuredMedia {
+        width: 100%;
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+
+    .title {
+        margin: 0.5em 0;
+        border: none;
+        font-size: 2em;
+        font-family: $f1;
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+
+    .postContent {
+        padding: 2em;
+        grid-column-start: 1;
+        grid-column-end: 2;
+
+        a {
+            font-family: $f1;
+            @include transition;
+            text-decoration: none;
+        }
+    }
+
+    .sidebar {
+        grid-column-start: 2;
+        grid-column-end: 3;
+    }
+
+    .infoBtn {
+        @include btn
+    }
+}
