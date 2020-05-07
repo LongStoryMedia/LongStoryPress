@@ -8,11 +8,12 @@
 *.py
 *.phar
 *.cache
+*.prettierrc
 
 wp-config.php
 wp-blog-header.php
 wp-activate.php
-index.php
+# index.php
 wp-comments-post.php
 wp-config-sample.php
 wp-links-opml.php
@@ -25,21 +26,19 @@ wp-signup.php
 wp-trackback.php
 xmlrpc.php
 RoboFile.php
-wp-content/advanced-cache.php
-wp-content/backup-db/
-wp-content/backups/
-wp-content/blogs.dir/
-wp-content/cache/
-wp-content/upgrade/
-wp-content/uploads/
-wp-content/plugins/
-wp-content/mu-plugins/
-wp-content/wp-cache-config.php
-wp-content/plugins/hello.php
-wp-content/*
-wp-admin**
-wp-includes**
-!wp-content/themes**
+LSP_WP/wp-content/advanced-cache.php
+LSP_WP/wp-content/backup-db/
+LSP_WP/wp-content/backups/
+LSP_WP/wp-content/blogs.dir/
+LSP_WP/wp-content/cache/
+LSP_WP/wp-content/upgrade/
+LSP_WP/wp-content/uploads/
+LSP_WP/wp-content/plugins/
+LSP_WP/wp-content/mu-plugins/
+LSP_WP/wp-content/wp-cache-config.php
+# LSP_WP/wp-content/**
+LSP_WP/wp-admin**
+LSP_WP/wp-includes**
 
 /.htaccess
 /license.txt
@@ -51,13 +50,12 @@ wp-includes**
 **node_modules**
 **unused**
 **dist**
-**node_modules**
 **/server/**
 **/public/**
 **logo.*
 **server.conf
+**.nginx.conf
 
-server_names
 lsp
 
 **.com
@@ -74,4 +72,7 @@ lsp
 !example.com/.env*
 !**/data-server/**
 !**/render-server/**
+!LSP_WP/wp-content/themes*/**
+!LSP_WP/wp-content*/**index.php
+!LSP_WP/wp-content/themes*/**index.php
 !.env.development

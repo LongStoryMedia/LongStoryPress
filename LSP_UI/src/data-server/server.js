@@ -37,6 +37,14 @@ export default config => {
     endpoint({ type: "login", path: "jwt-auth/v1/token" })(config)
   );
   app.use(
+    "/lsp-api/search",
+    endpoint({
+      type: "search",
+      path: "wp/v2/search",
+      chainAllOptions: false
+    })(config)
+  );
+  app.use(
     "/lsp-api/media",
     endpoint({ type: "media", path: "lsp-api/v1/media" })(config)
   );
@@ -76,14 +84,10 @@ export default config => {
     "/lsp-api/menus",
     endpoint({
       type: "menus",
-      path: "wp-api-menus/v2/menus",
+      path: "lsp-api/v1/menus",
       chainAllOptions: false,
-      parameter: "id"
+      byQuery: false
     })(config)
-  );
-  app.use(
-    "/lsp-api/root",
-    endpoint({ type: "root", path: "/", chainAllOptions: false })(config)
   );
   app.use(
     "/lsp-api/taxonomies",
@@ -91,7 +95,11 @@ export default config => {
   );
   app.use(
     "/lsp-api/settings",
-    endpoint({ type: "taxonomies", path: "lsp-api/v1/settings" })(config)
+    endpoint({ type: "settings", path: "lsp-api/v1/settings" })(config)
+  );
+  app.use(
+    "/lsp-api",
+    endpoint({ type: "root", path: "/", chainAllOptions: false })(config)
   );
 
   app.use((req, res, next) => {
@@ -103,6 +111,7 @@ export default config => {
   if (process.env.NODE_ENV === "development") {
     app.use((err, req, res) => {
       res.status(err.status || 500).send(err);
+      throw new Error(err)
     });
   }
 

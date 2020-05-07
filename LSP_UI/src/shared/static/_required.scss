@@ -1,29 +1,5 @@
-$f1: "Courier", serif;
-$f2: "Times New Roman", serif;
-$f3: "Times New Roman", serif;
-$f4: "Courier", serif;
+@import "Site/static/styles.scss";
 $r: calc(1em + 1vmin);
-$black: #232323;
-$grey: rgb(105, 105, 105);
-$lightgrey: #ebebeb;
-$slate: #59807e;
-$white: #fff;
-$clear: transparent;
-$orange: #5af2ff;
-$green: #2c5b3f;
-$lightgreen: #d6e1db;
-$lightyellow: #dfdfd7;
-$blue: #2970ae;
-$red: #a50d0d;
-$purple: rgb(120, 90, 170);
-$yellow: rgb(150, 190, 120);
-$shadow: -0.1rem 0 2px rgba($black, 0.6);
-$btnshadow: inset 0 1px 0 $grey, 0 1px 2px 2px $black;
-$tablet: "1000px";
-$smtablet: "850px";
-$lgmobile: "768px";
-$medmobile: "480px";
-$smmobile: "320px";
 @function moreblue($color, $percent) {
   @return mix($blue, $color, $percent);
 }
@@ -64,8 +40,8 @@ $smmobile: "320px";
   $y: 0,
   $blur: 30,
   $spread: -7.5,
-  $color1: $grey,
-  $color2: $clear
+  $color1: transparent,
+  $color2: black
 ) {
   $shadows: ();
   @for $i from 1 through $size {
@@ -75,16 +51,16 @@ $smmobile: "320px";
   box-shadow: $inset #{$shadows};
 }
 @mixin threeDtxt(
-  $size: 2,
+  $size: 3,
   $x: -1,
   $y: -0.75,
-  $blur: 1,
-  $color1: $lightgrey,
-  $color2: $grey
+  $blur: 2,
+  $color1: transparent,
+  $color2: black
 ) {
   $shadows: ();
   @for $i from 1 through $size {
-    $single-shadow: "#{$x*$i+-($i/2)}px #{$y*$i+-($i/2)}px #{$blur+($i*.25)}px #{transparentize(mix($color1,$color2,1/$i*100%),$i/$size)}";
+    $single-shadow: "#{$x*$i+-($i/2)}px #{$y*$i+-($i/2.5)}px #{$blur+($i*.5)}px #{transparentize(mix($color1,$color2,0.5/$i*100%),$i/$size)}";
     $shadows: join($shadows, $single-shadow, comma);
   }
   text-shadow: #{$shadows};
@@ -97,7 +73,7 @@ $smmobile: "320px";
 @mixin transition {
   transition-duration: 0.25s;
   transition-property: all;
-  transition-timing-function: cubic-bezier(0.75, 0, 1, 1.25);
+  transition-timing-function: cubic-bezier(0.65, 0.25, 0.15, 0.95);
 }
 @mixin fasttransition {
   transition-duration: 0.05s;
@@ -107,6 +83,7 @@ $smmobile: "320px";
 @mixin growfont($grow: 1em) {
   @include transition;
   font-size: #{$grow};
+
   &:hover {
     font-size: #{$grow * 1.1};
   }
@@ -139,6 +116,7 @@ $smmobile: "320px";
       bottom: -4em;
     }
   }
+
   &:before {
     position: absolute;
     content: " ";
@@ -157,15 +135,18 @@ $smmobile: "320px";
       bottom: -1em;
     }
   }
+
   &:hover {
     width: 1.25em;
     height: 1.25em;
+
     &:after {
       transition-delay: 0.4s;
       height: 3.5em;
       width: 7em;
       opacity: 1;
     }
+
     &:before {
       transition-delay: 0.4s;
       height: 0.35em;
@@ -174,13 +155,45 @@ $smmobile: "320px";
     }
   }
 }
-@mixin underline($font-size: 1em, $text-decoration: none) {
+@mixin simpleunderline(
+  $text-decoration: none
+) {
+  position: relative;
+  text-decoration: $text-decoration;
+  @include threeDtxt($size: 1);
+  @include transition;
+  &:before {
+    content: "";
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    visibility: hidden;
+    transform: scaleX(0);
+    @include transition;
+  }
+  &:hover {
+    @include threeDtxt;
+    @include transition;
+    &:before {
+      visibility: visible;
+      transform: scale(1);
+    }
+  }
+}
+@mixin underline(
+  $font-size: 1em,
+  $text-decoration: none,
+  $simple-override: 0
+) {
   & > * {
     @include threeDtxt($size: 1);
     @include transition;
     position: relative;
     font-size: $font-size;
     text-decoration: $text-decoration;
+
     &:before {
       content: "";
       position: absolute;
@@ -193,13 +206,24 @@ $smmobile: "320px";
       @include transition;
     }
   }
+
   &:hover {
     & > * {
       @include threeDtxt($size: 1);
       @include transition;
+
       &:before {
         visibility: visible;
         transform: scale(1);
+      }
+    }
+
+    @if $simple-override > 0 {
+      /* in case applied to <a>,
+      where the simpleUnderline mixin is applied by default,
+      we want to override to not get two underlines */
+      &:before {
+        visibility: hidden;
       }
     }
   }
@@ -210,12 +234,15 @@ $smmobile: "320px";
   cursor: pointer;
   @include transition;
   font-family: $f1;
+
   &:active {
     @include threeD(inset);
   }
+
   &:focus {
     box-shadow: none;
   }
+
   &:active,
   &:focus {
     outline: 0;
@@ -266,38 +293,12 @@ $smmobile: "320px";
   transition-duration: 0.4s;
   transition-timing-function: cubic-bezier(0.42, 0, 1, 2.93);
 }
-.loadingBox {
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  background-color: transparentize($lightgrey, 0.05);
-  z-index: 15;
-  position: fixed;
-  .loading {
-    width: 5em;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    animation-name: spin;
-    animation-duration: 1000ms;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-  }
-}
-.loaderImg {
-  animation-name: spin;
-  animation-duration: 1000ms;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -306,9 +307,11 @@ $smmobile: "320px";
   0% {
     opacity: 0.1;
   }
+
   20% {
     opacity: 1;
   }
+
   100% {
     opacity: 0.1;
   }
@@ -317,15 +320,19 @@ $smmobile: "320px";
   0% {
     transform: rotate3d(0);
   }
+
   25% {
     transform: rotate3d(0, 1, 0, 90deg);
   }
+
   50% {
     transform: rotate3d(0, 1, 0, 180deg);
   }
+
   75% {
     transform: rotate3d(0, 1, 0, 270deg);
   }
+
   100% {
     transform: rotate3d(0);
   }
@@ -333,55 +340,67 @@ $smmobile: "320px";
 @keyframes float {
   0% {
     opacity: 0.1;
-    padding: 10em 0;
+    padding: 7em 0;
     transform: rotate3d(0, 0, 1, -90deg);
     left: 100%;
   }
+
   10% {
     opacity: 1;
     transform: rotate3d(0, 0, 1, -80deg);
-    padding: 9em 0;
+    padding: 6em 0;
     left: 90%;
   }
+
   20% {
     transform: rotate3d(0, 0, 1, -70deg);
-    padding: 8em 0;
+    padding: 5em 0;
     left: 80%;
   }
+
   30% {
     transform: rotate3d(0, 0, 1, -60deg);
-    padding: 7em 0;
+    padding: 4em 0;
     left: 70%;
   }
+
   40% {
     transform: rotate3d(0, 0, 1, -50deg);
-    padding: 6em 0;
+    padding: 3em 0;
     left: 60%;
   }
+
   50% {
-    transform: rotate3d(0);
-    padding: 5em 0;
+    transform: rotate3d(0, 0, 1, -40deg);
+    padding: 2em 0;
     left: 50%;
   }
+
   60% {
+    transform: rotate3d(0, 0, 1, -30deg);
     left: 40%;
-    padding: 4em 0;
+    padding: 1em 0;
   }
+
   70% {
-    padding: 3em 0;
+    transform: rotate3d(0, 0, 1, -20deg);
+    padding: 0;
     left: 30%;
   }
 
   80% {
+    transform: rotate3d(0, 0, 1, -10deg);
     opacity: 0.1;
-    padding: 2em 0;
+    padding: 0;
     left: 20%;
   }
 
   90% {
-    padding: 1em 0;
+    transform: rotate3d(0);
+    padding: 0;
     left: 10%;
   }
+
   100% {
     opacity: 1;
     padding: 0;
@@ -392,9 +411,11 @@ $smmobile: "320px";
   0% {
     opacity: 0.25;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     opacity: 0.25;
   }
@@ -418,5 +439,5 @@ $smmobile: "320px";
   animation-duration: 1.4s;
 }
 @mixin pulseFloat {
-  animation: float 15s linear 0s 1, pulse 3s linear 15s infinite;
+  animation: float 15s linear 0s 1, twirl 30s ease-in-out 10s infinite, pulse 3s linear 15s infinite;
 }

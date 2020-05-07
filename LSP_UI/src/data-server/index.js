@@ -2,7 +2,6 @@ import server from "./server";
 
 const {
   LSP_HOST,
-  LSP_API_ADDRESS,
   LSP_DATA_PORT,
   LSP_ADMIN,
   STRIPE_SK
@@ -12,5 +11,5 @@ export default server({
   api: LSP_HOST,
   port: LSP_DATA_PORT,
   stripe: STRIPE_SK,
-  url: LSP_ADMIN
+  url: `${LSP_ADMIN}`
 });

@@ -1,0 +1,56 @@
+@import "../static/_required.scss";
+
+.contentBox {
+    padding: 0.75em;
+    display: grid;
+    max-width: 300px;
+
+    .title {
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        text-transform: uppercase;
+        text-align: center;
+        @include underline;
+        @include transition;
+        max-height: 100%;
+        max-width: 100%;
+
+        &.placeHolder {
+            filter: blur(5px);
+        }
+
+        span {
+            padding: 0.25em;
+        }
+
+        &:first-child:first-letter {
+            @include threeDtxt;
+            font-family: $f2;
+            width: 6em;
+        }
+
+    }
+
+    .content {
+        padding: 0.35em;
+        display: inline-block;
+
+        a {
+            font-family: $f1;
+            @include transition;
+            text-decoration: none;
+        }
+
+        &:first-child:first-letter {
+            font-size: 1.25em;
+        }
+
+        .sectionImage {
+            max-height: 7em;
+        }
+    }
+}

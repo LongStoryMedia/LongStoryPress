@@ -1,5 +1,4 @@
-import React, { PureComponent, Fragment } from "react";
-import DotLoader from "../UI/DotLoader";
+import React, { PureComponent } from "react";
 
 export const deref = (obj, arr) => {
   let i = 0;
@@ -7,8 +6,8 @@ export const deref = (obj, arr) => {
   return obj;
 };
 
-export default (WC, { param, wpPostType, apiPostType, windowData = false }) =>
-  class extends PureComponent {
+export default (WC, { param, windowData = false }) => {
+  return class extends PureComponent {
     constructor(props) {
       super(props);
       let data;
@@ -22,44 +21,52 @@ export default (WC, { param, wpPostType, apiPostType, windowData = false }) =>
       }
       this.state = {
         data,
-        mounted: false,
         loading: data ? false : true
       };
     }
     componentDidMount() {
-      if (!this.state.data) this.setData();
+      const { data } = this.state;
+      !data && this.setDataInternal();
     }
     componentDidUpdate(prevProps) {
-      if (
-        deref(this.props, param) !== deref(prevProps, param) &&
-        this.state.mounted
-      )
-        this.setData();
+      const { location } = this.props;
+      if (windowData && location !== prevProps.location) {
+        this.setDataInternal();
+      }
     }
-    setData = () => {
-      this.setState(() => ({ loading: true }));
-      this.props.fetchInitialData(deref(this.props, param)).then(data => {
-        this.setState(() => ({ data, loading: false }));
-      });
+    componentWillUnmount() {
+      this.setState({ data: null });
+    }
+    setDataInternal = async () => {
+      const { fetchInitialData, setData } = this.props;
+      const data = await fetchInitialData(deref(this.props, param));
+      setData(data);
+      this.setState({ loading: true });
+      try {
+        this.setState({ data });
+      } catch (e) {
+        console.log(e);
+        const E = window.confirm("Something went wrong! Click 'ok' to reload.");
+        if (E) window.location.reload(true);
+      }
+      this.setState({ loading: false });
     };
     render() {
       const { loading, data } = this.state;
       const { loader } = this.props;
       return (
-        <Fragment>
-          {loader ? loader : <DotLoader loading={loading} />}
+        <>
+          {loader ? loader : null}
           {data && (
             <WC
               {...this.props}
               data={data}
-              setData={this.setData}
               loading={loading}
               param={deref(this.props, param)}
-              wpPostType={wpPostType}
-              apiPostType={apiPostType}
             />
           )}
-        </Fragment>
+        </>
       );
     }
   };
+};

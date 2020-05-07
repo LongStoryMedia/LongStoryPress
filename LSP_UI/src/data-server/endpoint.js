@@ -5,10 +5,10 @@ export default ({
   type,
   path,
   body = {},
-  parameter = "slug",
+  byQuery = true,
   pageNum = 1,
   startAt = 0,
-  pageLength = 10,
+  pageLength = 100,
   sort = "asc",
   sortBy = "id",
   pwRequired = false,
@@ -16,11 +16,12 @@ export default ({
 }) => config => {
   const router = express.Router();
 
+  const isEmpty = obj =>
+    !!(Object.entries(obj).length === 0 && obj.constructor === Object);
+
   const qs = string => {
     const sym = /\?/.test(string) ? "&" : "?";
-    return chainAllOptions
-      ? `${sym}per_page=${pageLength}&page=${pageNum}&offset=${startAt}&order=${sort}&orderby=${sortBy}&_embed`
-      : "";
+    return `${sym}per_page=${pageLength}&page=${pageNum}&offset=${startAt}&order=${sort}&orderby=${sortBy}`;
   };
 
   const sendIf = ({ item, prop, ifNot = void 0 }) => {
@@ -55,21 +56,19 @@ export default ({
     content: sendIf({
       item: item.content,
       prop: "rendered",
-      ifNot: sendIf({ item: item.items, ifNot: [] })
+      ifNot: sendIf({ item: item.items, ifNot: "" })
     }),
     excerpt: sendIf({ item: item.excerpt, prop: "rendered" }),
     description: sendIf({ item: item.description }),
-    author: sendIf({ item: item.author }),
     categories: sendIf({ item: item.categories }),
     tags: sendIf({ item: item.tags }),
     featuredMedia: sendIf({
-      item: item._embedded,
-      prop: "wp:featuredmedia",
-      ifNot: {}
+      item: item.featured_media,
+      ifNot: 0
     }),
     date: sendIf({ item: item.date }),
     modified: sendIf({ item: item.modified }),
-    writtenBy: sendIf({ item: item._embedded, prop: "author" }),
+    author: sendIf({ item: item.author }),
     mediaDetails: sendIf({ item: item.media_details }),
     mediaType: sendIf({ item: item.media_type }),
     mimeType: sendIf({ item: item.mime_type }),
@@ -78,21 +77,12 @@ export default ({
     menuOrder: sendIf({ item: item.menu_order }),
     parent: sendIf({ item: item.parent }),
     meta: sendIf({ item: item.meta }),
-    custom: sendIf({ item: item.meta_box }),
-    post: sendIf({ item: item.post }),
-    page: sendIf({ item: item.page }),
-    attachment: sendIf({ item: item.attachment }),
-    product: sendIf({ item: item.product }),
-    wp_block: sendIf({ item: item.wp_block }),
-    lsp_product: sendIf({ item: item.lsp_product }),
-    lsp_tutorial: sendIf({ item: item.lsp_tutorial }),
-    lsp_slider: sendIf({ item: item.lsp_slider }),
-    _links: sendIf({ item: item._links }),
     site: sendIf({ item: item.site }),
     contact: sendIf({ item: item.contact }),
     colors: sendIf({ item: item.colors }),
-    lspSliders: sendIf({ item: item.lsp_sliders }),
-    lspGallery: sendIf({ item: item.lsp_gallery, ifNot: [] })
+    lsp_sliders: sendIf({ item: item.lsp_sliders }),
+    lsp_gallery: sendIf({ item: item.lsp_gallery }),
+    children: sendIf({ item: item.children })
   });
 
   const resJSON = async (req, res, next, data) => {
@@ -109,16 +99,33 @@ export default ({
         : responseObj;
     if (pwRequired && !req.headers.authorization)
       res.json({ error: "Please login to access your content", status: 401 });
-    await res.json(response);
+    await res.json({
+      head: {
+        type,
+        path,
+        title: response.title ? response.title : type,
+        slug: response.slug ? response.slug : type
+      },
+      body: response
+    });
   };
 
   const tryCatch = async (
     req,
     res,
     next,
-    { path, method = "GET", body, headers, queryString = "" }
+    { path, method = "GET", body, headers }
   ) => {
     const slash = "/" === path[0] ? "" : "/";
+    const query = isEmpty(req.query)
+      ? ""
+      : `${Object.keys(req.query)
+          .map((key, i) => {
+            const sym = i === 0 ? "?" : "&";
+            return `${sym}${key}=${req.query[key]}`;
+          })
+          .join("")}`;
+    const options = chainAllOptions ? qs(`${path}${query}`) : "";
     body = body ? JSON.stringify(body) : body;
     headers = new Headers({
       ...headers,
@@ -128,7 +135,7 @@ export default ({
       res.setHeader("Authorization", req.headers.authorization);
     try {
       const request = await fetch(
-        `${config.url}/wp-json${slash}${path}${qs(path)}`,
+        `${config.url}/wp-json${slash}${path}${query}${options}`,
         { method, headers, body }
       );
       return await request.json();
@@ -155,25 +162,13 @@ export default ({
     });
 
   router.route(`/:id`).get(async (req, res, next) => {
-    const pathname =
-      parameter !== "id"
-        ? `${path}?${parameter}=${req.params.id}`
-        : `${path}/${req.params.id}`;
+    const pathname = byQuery
+      ? `${path}?slug=${req.params.id}`
+      : `${path}/${req.params.id}`;
 
     if (type === "users" || req.params.id === "me")
       res.json(await tryCatch(req, res, next, { path: "/wp/v2/users/me" }));
 
-    if (type === "menus") {
-      const menus = await tryCatch(req, res, next, { path });
-      const menuId = menus.filter(menu => menu.slug === req.params.id);
-      if (!menuId || !menuId[0]) res.json(wpObj({}));
-      else {
-        const data = await tryCatch(req, res, next, {
-          path: `${path}/${menuId[0].ID}`
-        });
-        return resJSON(req, res, next, data);
-      }
-    }
     const data = await tryCatch(req, res, next, { path: pathname });
     return resJSON(req, res, next, data);
   });

@@ -9,6 +9,11 @@
   "private": true,
   "eslintConfig": {
     "extends": "react-app",
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
     "globals": {
       "__isBrowser__": true
     },
@@ -64,10 +69,13 @@
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "autoprefixer": "^9.4.7",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
     "babel-plugin-css-modules-transform": "^1.6.1",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "babel-polyfill": "^6.26.0",
     "clean-webpack-plugin": "^0.1.19",
     "compression-webpack-plugin": "^2.0.0",
@@ -84,6 +92,8 @@
     "fs-extra": "^7.0.0",
     "jest": "^23.6.0",
     "mini-css-extract-plugin": "^0.4.4",
+    "node-gyp": "^3.8.0",
+    "node-sass": "^4.10.0",
     "nodemon": "^1.18.4",
     "postcss-clean": "^1.1.0",
     "postcss-import": "^12.0.1",
@@ -103,7 +113,8 @@
     "webpack-dev-server": "^3.1.9",
     "webpack-hot-middleware": "^2.24.3",
     "webpack-manifest-plugin": "^2.0.4",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "workbox-webpack-plugin": "^3.6.3"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.6",
@@ -117,14 +128,14 @@
     "express": "^4.16.4",
     "helmet": "^3.14.0",
     "isomorphic-fetch": "^2.2.1",
+    "long-story-library": "^0.0.23",
     "mysql": "^2.16.0",
-    "node-gyp": "^3.8.0",
-    "node-sass": "^4.10.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-helmet": "^5.2.0",
+    "react-gallery-designer": "^1.4.2",
+    "react-helmet-async": "^1.0.4",
     "react-loadable": "^5.5.0",
-    "react-router-dom": "^4.3.1",
+    "react-router-dom": "^5.1.2",
     "react-svg-inline": "^2.1.1",
     "serialize-javascript": "^1.5.0",
     "universal-cookie": "^3.0.4"

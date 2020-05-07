@@ -1,78 +1,38 @@
-import React, { PureComponent, Fragment } from "react";
-import { NavLink } from "react-router-dom";
+import React from "react";
+import { Helmet } from "react-helmet-async";
+import _$ from "long-story-library";
 import isomorphic from "../utils/isomorphic";
-import PreviewCard from "../UI/PreviewCard";
-import styles from "./journals.scss";
 
-class PostList extends PureComponent {
-  render() {
-    const {
-      data,
-      authenticated,
-      settings,
-      wpPostType,
-      apiPostType,
-      param
-    } = this.props;
-    return (
-      <div>
-        {data &&
-          data.map(({ id, slug, title, excerpt, featuredMedia }) => (
-            <Fragment key={id}>
-              {authenticated && (
-                <a
-                  className={styles.listItem}
-                  href={`${
-                    process.env.LSP_ADMIN
-                  }/wp-admin/post-new.php?post_type=${wpPostType}`}
-                >
-                  <PreviewCard
-                    title={`add new ${apiPostType.slice(
-                      0,
-                      apiPostType.length
-                    )}`}
-                    className={styles.contentBox}
-                  />
-                </a>
-              )}
-              <NavLink className={styles.listItem} to={`/${param}/${slug}`}>
-                {settings ? (
-                  <PreviewCard
-                    featuredMedia={
-                      featuredMedia.mediaDetails.sizes.medium.source_url
-                    }
-                    title={title}
-                    content={excerpt}
-                    className={styles.contentBox}
-                    style={{ backgroundColor: settings.colors.background_two }}
-                  />
-                ) : (
-                  <p>{title}</p>
-                )}
-              </NavLink>
-            </Fragment>
-          ))}
-      </div>
-    );
-  }
-}
-
-export default {
-  blog: isomorphic(PostList, {
-    param: ["match", "params", 0],
-    apiPostType: "posts",
-    wpPostType: "post"
-  }),
-  articles: isomorphic(PostList, {
-    param: ["match", "params", 0],
-    apiPostType: "posts",
-    wpPostType: "post"
-  }),
-  tutorials: isomorphic(PostList, {
-    param: ["match", "params", 0],
-    apiPostType: "tutorials",
-    wpPostType: "lsp_tutorial"
-  })
+export default (WC, { param = ["match", "params", 0], windowData = true }) => {
+  return isomorphic(
+    ({ data, className, header, ...props }) => {
+      const title = _$(data).OBJ(["head", "title"]);
+      return (
+        <>
+          <Helmet>
+            <title>{title}</title>
+            <meta name="twitter:title" content={title} />
+          </Helmet>
+          <div className={className}>
+            {header ? <h2>{header}</h2> : ""}
+            {_$(data)
+              .OBJ(["body"])
+              .map(({ id, ...rest }, i) => (
+                <WC
+                  key={id}
+                  id={id}
+                  data={data}
+                  className={className}
+                  header={header}
+                  {...props}
+                  {...rest}
+                  i={i}
+                />
+              ))}
+          </div>
+        </>
+      );
+    },
+    { param, windowData }
+  );
 };
-
-//

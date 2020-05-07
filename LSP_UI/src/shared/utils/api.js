@@ -1,12 +1,16 @@
 import Cookies from "universal-cookie";
 import fetch from "isomorphic-fetch";
-import config from "../config";
 const cookies = new Cookies();
+
+const apiRoot = process.env.NODE_ENV !== "production"
+  ? `http://localhost:${process.env.LSP_DATA_PORT}/lsp-api`
+  : `${process.env.LSP_URL_PROTOCOL}/lsp-api`
 
 export const invokeApi = async ({
   path,
   method = "GET",
   headers = {},
+  query = "",
   body,
   props
 }) => {
@@ -16,13 +20,13 @@ export const invokeApi = async ({
   auth() && headers.append("Authorization", auth().token);
   headers.append("Content-Type", "application/json");
   try {
-    const res = await fetch(config.apiRoot + slash + path, {
+    const res = await fetch(apiRoot + slash + path + query, {
       method,
       headers,
       body
     });
-    if (200 !== (await res.status)) {
-      if (401 === (await res.status) && props) {
+    if (200 !== res.status) {
+      if (401 === res.status && props) {
         return props.history.push(
           `/account/login?redirect=${props.location.pathname}`
         );
@@ -61,8 +65,8 @@ export const login = async ({ username, password }) => {
 };
 
 export const logout = async () => {
-  await cookies.remove("lsm_token");
-  await cookies.remove("lsm_user");
+  cookies.remove("lsp_token");
+  cookies.remove("lsp_user");
 };
 
 export const findLocalItems = query => {
