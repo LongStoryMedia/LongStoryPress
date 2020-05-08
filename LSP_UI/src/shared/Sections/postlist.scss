@@ -1,0 +1,8 @@
+@import "../static/_required.scss";
+
+.postList {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+
+}

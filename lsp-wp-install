@@ -1,0 +1,14 @@
+#!/bin/bash
+
+cd $4
+wp core download --skip-content;
+sed -i "s/database_name_here/$1/;s/username_here/$2/;s/password_here/$3/" wp-config-sample.php
+SALT_START=$(awk "/'AUTH_KEY'/{ print NR; exit}" wp-config-sample.php)
+head -$((SALT_START-1)) wp-config-sample.php > wp-config.php
+echo "define('FS_METHOD', 'direct');" >> wp-config.php
+echo "define('WP_ALLOW_MULTISITE', true);" >> wp-config.php
+curl -s https://api.wordpress.org/secret-key/1.1/salt/ | head -1 | sed "s/'AUTH_KEY'/'JWT_AUTH_SECRET_KEY'/" >> wp-config.php
+echo "define('JWT_AUTH_CORS_ENABLE', true);" >> wp-config.php
+curl -s https://api.wordpress.org/secret-key/1.1/salt/ >> wp-config.php
+tail +$((SALT_START+8)) wp-config-sample.php >> wp-config.php
+sudo rm -f wp-config-sample.php

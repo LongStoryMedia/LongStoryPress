@@ -7,6 +7,11 @@ const api = nodemon({
   watch: path.resolve(paths.appSrc, "data-server/*")
 });
 
+// api.once("exit", function() {
+//   console.log("Exiting api");
+//   process.exit();
+// });
+
 ["SIGINT", "SIGTERM"].forEach(sig => {
   api.on(sig, () => {
     api.exit();

@@ -1,0 +1,28 @@
+#!/usr/bin/env
+
+if [[ $1 == "ssl" ]]; then
+  read -p "would you like to build with an ssl certificate?" yn
+  case $yn in
+    [Yy]* )
+    echo "building files for production..."
+    node -r dotenv/config ../scripts/build.js ssl
+    ;;
+    [Nn]* )
+    echo "if you don't have a cert available, simply leave out the 'ssl' argument"
+    exit 0
+    ;;
+  esac;
+else
+  read -p "would you like to build WITHOUT an ssl certificate?" yn
+  case $yn in
+    [Yy]* )
+    echo "building files for production..."
+    node -r dotenv/config ../scripts/build.js
+    ;;
+    [Nn]* )
+    echo "to build with an existing ssl, append the argument 'ssl' to you build command."
+    echo "for info on free ssl certs, check out https://letsencrypt.org/"
+    exit 0
+    ;;
+  esac;
+fi;

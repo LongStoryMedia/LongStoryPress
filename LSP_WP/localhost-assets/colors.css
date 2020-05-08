@@ -1,0 +1,336 @@
+.color_primary_color,
+.children_color_primary_color > *,
+.active_color_primary_color:active,
+.focus_color_primary_color:focus,
+.visited_color_primary_color:visited,
+.hover_color_primary_color:hover,
+.children_hover_color_primary_color:hover > *,
+.pseudo_color_primary_color:before,
+.pseudo_color_primary_color:after {
+  color: #232323;
+}
+.color_secondary_color,
+.children_color_secondary_color > *,
+.active_color_secondary_color:active,
+.focus_color_secondary_color:focus,
+.visited_color_secondary_color:visited,
+.hover_color_secondary_color:hover,
+.children_hover_color_secondary_color:hover > *,
+.pseudo_color_secondary_color:before,
+.pseudo_color_secondary_color:after {
+  color: #2c5b3f;
+}
+a:hover,
+.color_accent_color,
+.children_color_accent_color > *,
+.active_color_accent_color:active,
+.focus_color_accent_color:focus,
+.visited_color_accent_color:visited,
+.hover_color_accent_color:hover,
+.children_hover_color_accent_color:hover > *,
+.pseudo_color_accent_color:before,
+.pseudo_color_accent_color:after {
+  color: #b07f5e;
+}
+.color_background_one,
+.children_color_background_one > *,
+.active_color_background_one:active,
+.focus_color_background_one:focus,
+.visited_color_background_one:visited,
+.hover_color_background_one:hover,
+.children_hover_color_background_one:hover > *,
+.pseudo_color_background_one:before,
+.pseudo_color_background_one:after {
+  color: #ffffff;
+}
+.color_background_two,
+.children_color_background_two > *,
+.active_color_background_two:active,
+.focus_color_background_two:focus,
+.visited_color_background_two:visited,
+.hover_color_background_two:hover,
+.children_hover_color_background_two:hover > *,
+.pseudo_color_background_two:before,
+.pseudo_color_background_two:after {
+  color: #ebebeb;
+}
+.color_backdrop,
+.children_color_backdrop > *,
+.active_color_backdrop:active,
+.focus_color_backdrop:focus,
+.visited_color_backdrop:visited,
+.hover_color_backdrop:hover,
+.children_hover_color_backdrop:hover > *,
+.pseudo_color_backdrop:before,
+.pseudo_color_backdrop:after {
+  color: #d5e3db;
+}
+.color_text_color,
+.children_color_text_color > *,
+.active_color_text_color:active,
+.focus_color_text_color:focus,
+.visited_color_text_color:visited,
+.hover_color_text_color:hover,
+.children_hover_color_text_color:hover > *,
+.pseudo_color_text_color:before,
+.pseudo_color_text_color:after {
+  color: #232323;
+}
+h1,
+h2,
+.color_header_text_color,
+.children_color_header_text_color > *,
+.active_color_header_text_color:active,
+.focus_color_header_text_color:focus,
+.visited_color_header_text_color:visited,
+.hover_color_header_text_color:hover,
+.children_hover_color_header_text_color:hover > *,
+.pseudo_color_header_text_color:before,
+.pseudo_color_header_text_color:after {
+  color: #232323;
+}
+a,
+.color_link_text_color,
+.children_color_link_text_color > *,
+.active_color_link_text_color:active,
+.focus_color_link_text_color:focus,
+.visited_color_link_text_color:visited,
+.hover_color_link_text_color:hover,
+.children_hover_color_link_text_color:hover > *,
+.pseudo_color_link_text_color:before,
+.pseudo_color_link_text_color:after {
+  color: #469365;
+}
+.color_contrast_text_color,
+.children_color_contrast_text_color > *,
+.active_color_contrast_text_color:active,
+.focus_color_contrast_text_color:focus,
+.visited_color_contrast_text_color:visited,
+.hover_color_contrast_text_color:hover,
+.children_hover_color_contrast_text_color:hover > *,
+.pseudo_color_contrast_text_color:before,
+.pseudo_color_contrast_text_color:after {
+  color: #ffffff;
+}
+.pseudo_background_primary_color:before,
+.pseudo_background_primary_color:after,
+.hover_background_primary_color:hover,
+.children_hover_background_primary_color:hover > *,
+.active_background_primary_color:active,
+.focus_background_primary_color:focus,
+.visited_background_primary_color:visited,
+.background_primary_color,
+.children_background_primary_color > * {
+  background-color: #232323;
+}
+a:before,
+a:after,
+.pseudo_background_secondary_color:before,
+.pseudo_background_secondary_color:after,
+.hover_background_secondary_color:hover,
+.children_hover_background_secondary_color:hover > *,
+.active_background_secondary_color:active,
+.focus_background_secondary_color:focus,
+.visited_background_secondary_color:visited,
+.background_secondary_color,
+.children_background_secondary_color > * {
+  background-color: #2c5b3f;
+}
+.pseudo_background_accent_color:before,
+.pseudo_background_accent_color:after,
+.hover_background_accent_color:hover,
+.children_hover_background_accent_color:hover > *,
+.active_background_accent_color:active,
+.focus_background_accent_color:focus,
+.visited_background_accent_color:visited,
+.background_accent_color,
+.children_background_accent_color > * {
+  background-color: #b07f5e;
+}
+.pseudo_background_background_one:before,
+.pseudo_background_background_one:after,
+.hover_background_background_one:hover,
+.children_hover_background_background_one:hover > *,
+.active_background_background_one:active,
+.focus_background_background_one:focus,
+.visited_background_background_one:visited,
+.background_background_one,
+.children_background_background_one > * {
+  background-color: #ffffff;
+}
+.pseudo_background_background_two:before,
+.pseudo_background_background_two:after,
+.hover_background_background_two:hover,
+.children_hover_background_background_two:hover > *,
+.active_background_background_two:active,
+.focus_background_background_two:focus,
+.visited_background_background_two:visited,
+.background_background_two,
+.children_background_background_two > * {
+  background-color: #ebebeb;
+}
+.pseudo_background_backdrop:before,
+.pseudo_background_backdrop:after,
+.hover_background_backdrop:hover,
+.children_hover_background_backdrop:hover > *,
+.active_background_backdrop:active,
+.focus_background_backdrop:focus,
+.visited_background_backdrop:visited,
+.background_backdrop,
+.children_background_backdrop > * {
+  background-color: #d5e3db;
+}
+.pseudo_background_text_color:before,
+.pseudo_background_text_color:after,
+.hover_background_text_color:hover,
+.children_hover_background_text_color:hover > *,
+.active_background_text_color:active,
+.focus_background_text_color:focus,
+.visited_background_text_color:visited,
+.background_text_color,
+.children_background_text_color > * {
+  background-color: #232323;
+}
+.pseudo_background_header_text_color:before,
+.pseudo_background_header_text_color:after,
+.hover_background_header_text_color:hover,
+.children_hover_background_header_text_color:hover > *,
+.active_background_header_text_color:active,
+.focus_background_header_text_color:focus,
+.visited_background_header_text_color:visited,
+.background_header_text_color,
+.children_background_header_text_color > * {
+  background-color: #232323;
+}
+.pseudo_background_link_text_color:before,
+.pseudo_background_link_text_color:after,
+.hover_background_link_text_color:hover,
+.children_hover_background_link_text_color:hover > *,
+.active_background_link_text_color:active,
+.focus_background_link_text_color:focus,
+.visited_background_link_text_color:visited,
+.background_link_text_color,
+.children_background_link_text_color > * {
+  background-color: #469365;
+}
+.pseudo_background_contrast_text_color:before,
+.pseudo_background_contrast_text_color:after,
+.hover_background_contrast_text_color:hover,
+.children_hover_background_contrast_text_color:hover > *,
+.active_background_contrast_text_color:active,
+.focus_background_contrast_text_color:focus,
+.visited_background_contrast_text_color:visited,
+.background_contrast_text_color,
+.children_background_contrast_text_color > * {
+  background-color: #ffffff;
+}
+.border_primary_color,
+.hover_border_primary_color:hover,
+.focus_border_primary_color:focus,
+.active_border_primary_color:active,
+.visited_border_primary_color:visited,
+.children_border_primary_color > *,
+.children_hover_border_primary_color:hover > *,
+.pseudo_border_primary_color:before,
+.pseudo_border_primary_color:after {
+  border-color: #232323;
+}
+.border_secondary_color,
+.hover_border_secondary_color:hover,
+.focus_border_secondary_color:focus,
+.active_border_secondary_color:active,
+.visited_border_secondary_color:visited,
+.children_border_secondary_color > *,
+.children_hover_border_secondary_color:hover > *,
+.pseudo_border_secondary_color:before,
+.pseudo_border_secondary_color:after {
+  border-color: #2c5b3f;
+}
+.border_accent_color,
+.hover_border_accent_color:hover,
+.focus_border_accent_color:focus,
+.active_border_accent_color:active,
+.visited_border_accent_color:visited,
+.children_border_accent_color > *,
+.children_hover_border_accent_color:hover > *,
+.pseudo_border_accent_color:before,
+.pseudo_border_accent_color:after {
+  border-color: #b07f5e;
+}
+.border_background_one,
+.hover_border_background_one:hover,
+.focus_border_background_one:focus,
+.active_border_background_one:active,
+.visited_border_background_one:visited,
+.children_border_background_one > *,
+.children_hover_border_background_one:hover > *,
+.pseudo_border_background_one:before,
+.pseudo_border_background_one:after {
+  border-color: #ffffff;
+}
+.border_background_two,
+.hover_border_background_two:hover,
+.focus_border_background_two:focus,
+.active_border_background_two:active,
+.visited_border_background_two:visited,
+.children_border_background_two > *,
+.children_hover_border_background_two:hover > *,
+.pseudo_border_background_two:before,
+.pseudo_border_background_two:after {
+  border-color: #ebebeb;
+}
+.border_backdrop,
+.hover_border_backdrop:hover,
+.focus_border_backdrop:focus,
+.active_border_backdrop:active,
+.visited_border_backdrop:visited,
+.children_border_backdrop > *,
+.children_hover_border_backdrop:hover > *,
+.pseudo_border_backdrop:before,
+.pseudo_border_backdrop:after {
+  border-color: #d5e3db;
+}
+.border_text_color,
+.hover_border_text_color:hover,
+.focus_border_text_color:focus,
+.active_border_text_color:active,
+.visited_border_text_color:visited,
+.children_border_text_color > *,
+.children_hover_border_text_color:hover > *,
+.pseudo_border_text_color:before,
+.pseudo_border_text_color:after {
+  border-color: #232323;
+}
+.border_header_text_color,
+.hover_border_header_text_color:hover,
+.focus_border_header_text_color:focus,
+.active_border_header_text_color:active,
+.visited_border_header_text_color:visited,
+.children_border_header_text_color > *,
+.children_hover_border_header_text_color:hover > *,
+.pseudo_border_header_text_color:before,
+.pseudo_border_header_text_color:after {
+  border-color: #232323;
+}
+.border_link_text_color,
+.hover_border_link_text_color:hover,
+.focus_border_link_text_color:focus,
+.active_border_link_text_color:active,
+.visited_border_link_text_color:visited,
+.children_border_link_text_color > *,
+.children_hover_border_link_text_color:hover > *,
+.pseudo_border_link_text_color:before,
+.pseudo_border_link_text_color:after {
+  border-color: #469365;
+}
+.border_contrast_text_color,
+.hover_border_contrast_text_color:hover,
+.focus_border_contrast_text_color:focus,
+.active_border_contrast_text_color:active,
+.visited_border_contrast_text_color:visited,
+.children_border_contrast_text_color > *,
+.children_hover_border_contrast_text_color:hover > *,
+.pseudo_border_contrast_text_color:before,
+.pseudo_border_contrast_text_color:after {
+  border-color: #ffffff;
+}

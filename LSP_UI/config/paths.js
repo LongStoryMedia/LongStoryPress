@@ -13,11 +13,11 @@ module.exports = {
   appDistPublic: path.resolve(process.env.LSP_URL, "dist", "public"),
   appPublic: path.resolve(process.env.LSP_URL, "public"),
   appServer: path.resolve(process.env.LSP_URL, "server"),
+  appStatic: path.resolve(process.env.LSP_URL, "src", "static"),
+  globalStatic: resolveApp("src/shared/static"),
   appScripts: resolveApp("scripts"),
-  appIndexJs: resolveApp("src/index.js"),
   appPackageJson: resolveApp("package.json"),
   appSrc: resolveApp("src"),
   yarnLockFile: resolveApp("yarn.lock"),
-  testsSetup: resolveApp("src/setupTests.js"),
   appNodeModules: resolveApp("node_modules")
 };

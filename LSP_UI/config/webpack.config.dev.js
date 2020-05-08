@@ -18,9 +18,8 @@ module.exports = {
     createConfig(
       "render-server",
       [
-        new webpack.DefinePlugin({
-          __isBrowser__: false
-        })
+        new webpack.DefinePlugin({ __isBrowser__: false }),
+        new webpack.DefinePlugin(env.stringified)
       ],
       true
     ),

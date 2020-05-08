@@ -1,0 +1,24 @@
+@import "../static/_required.scss";
+
+.header {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.postList {
+  display: flex;
+  flex-flow: column;
+
+  .listItem {
+    text-decoration: none;
+    margin: 1em 0;
+    width: 100%;
+    text-align: right;
+    font-size: 1.5em;
+    display: flex;
+    justify-content: space-between;
+    border: none;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+  }
+}

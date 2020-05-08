@@ -1,106 +1,107 @@
 @import "../static/_required.scss";
 
-.topContent {
-    @include threeDtxt;
-    letter-spacing: 0.1em;
-    font-size: 1.2em;
-
-    .header {
-        margin: 1.25em;
-
-        &:first-child:first-letter {
-            text-transform: uppercase;
-            @include threeDtxt;
-            font-family: $f2;
-            font-size: 2em;
-        }
-    }
+.page {
+  display: block;
 }
 
-#home {
-    display: grid;
-    grid-gap: 3vmax;
+.topContent {
+  @include threeDtxt;
+  letter-spacing: 0.1em;
+  font-size: 1.2em;
 
-    .filter {
-        position: absolute;
-        top: 0;
-        left: 0;
+  .header {
+    margin: 1.25em;
 
-        .slider {
-            width: 100vw;
-            z-index: -1;
-            height: 20em;
-        }
+    &:first-child:first-letter {
+      text-transform: uppercase;
+      @include threeDtxt;
+      font-family: $f2;
+      font-size: 2em;
     }
+  }
+}
 
-    .taglineSection {
-        display: grid;
-        align-items: end;
-        margin: 2.5em auto;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 15vmax;
-        width: 85vw;
 
-        .background {
-            position: absolute;
-            height: 7em;
-            width: 85vw;
-            margin: 0 auto;
-            left: 0;
-            right: 0;
-            max-width: 700px;
-        }
 
-        .tagline {
-            font-family: $f1;
-            position: relative;
-            letter-spacing: 0.15em;
-            margin: 0.15em;
-            text-align: center;
-            font-size: calc(1em + 1vmin);
+.filter {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
-            .taglineWord {
-                display: inline-block;
-                text-transform: uppercase;
-                font-weight: 800;
-                opacity: 0;
-                @include slowtransition;
+.taglineSection {
+  display: grid;
+  align-items: end;
+  margin: 2.5em auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 15vmax;
+  width: 85vw;
 
-                &:first-letter {
-                    font-size: 1.5em;
-                    font-weight: 800;
-                }
-            }
-        }
+  .background {
+    position: absolute;
+    height: 7em;
+    width: 85vw;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    max-width: 700px;
+  }
+
+  .tagline {
+    font-family: $f1;
+    position: relative;
+    letter-spacing: 0.15em;
+    margin: 0.15em;
+    text-align: center;
+    font-size: calc(1em + 1vmin);
+
+    .taglineWord {
+      display: inline-block;
+      text-transform: uppercase;
+      font-weight: 800;
+      opacity: 0;
+      @include slowtransition;
+
+      &:first-letter {
+        font-size: 1.5em;
+        font-weight: 800;
+      }
     }
+  }
+}
 
-    .secondary {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, 15em);
-        grid-gap: 4em 5em;
-        justify-content: space-around;
+.secondary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 15em);
+  grid-gap: 5em 10em;
+  justify-content: space-around;
+  width: 80%;
+  margin: 0 auto;
 
-        .section {
-            text-decoration: none;
+  .section {
+    text-decoration: none;
+    display: inline-block;
+    min-width: 50%;
 
-            .contentBox {
-                letter-spacing: 0.05em;
-                display: grid;
-                grid-template-rows: 10em auto;
-                align-items: self-start;
-                height: 23em;
-                @include transition;
+    .contentBox {
+      letter-spacing: 0.05em;
+      margin: 0 auto;
+      height: 23em;
+      @include transition;
 
-                &:hover {
-                    @include threeD;
-                }
+      &::before {
+        background-color: transparent;
+      }
 
-                .content {
-                    align-self: center;
-                }
-            }
-        }
+      &:hover {
+        @include threeD;
+      }
+
+      .content {
+        align-self: center;
+      }
     }
+  }
 }

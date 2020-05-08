@@ -26,7 +26,7 @@ const babelLoader = {
     root: paths.appRoot,
     configFile: path.resolve(paths.appRoot, "babel.config.js")
   }
-}
+};
 
 module.exports = (name, customPlugins, shouldWatch, cb) => {
   let nodeFields,
@@ -39,9 +39,7 @@ module.exports = (name, customPlugins, shouldWatch, cb) => {
     nodeFields = { externals: [nodeExternals()], target: "node" };
     devTool = devMode ? "cheap-module-source-map" : "";
     customWatchOptions = {};
-    outputPath = devMode
-      ? path.resolve(process.env.LSP_URL, "server")
-      : path.resolve(process.env.LSP_URL, "dist/server");
+    outputPath = devMode ? paths.appServer : paths.appDistServer;
     loaderRules = rules.concat([
       {
         oneOf: [
@@ -50,8 +48,7 @@ module.exports = (name, customPlugins, shouldWatch, cb) => {
             test: /\.(bmp|gif|jpe?g|png)$/,
             loader: "url-loader?emitFile=false",
             options: {
-              limit: 10000,
-              name: "public/media/[name].[hash:8].[ext]"
+              emitFile: false
             }
           },
           {
@@ -110,38 +107,10 @@ module.exports = (name, customPlugins, shouldWatch, cb) => {
         maxSize: 300000,
         minSize: 5000,
         maxAsyncRequests: Infinity,
-        maxInitialRequests: Infinity,
-        cacheGroups: {
-          default: false,
-          commons: {
-            test: /[\\/]node_modules[\\/]/,
-            name: "vendor",
-            minChunks: 5,
-            priority: -10,
-            reuseExistingChunk: true
-          },
-          react: {
-            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-            name: "vendor-react",
-            chunks: "all"
-          },
-          reactRouter: {
-            test: /[\\/]node_modules[\\/](react-router|react-router-dom)[\\/]/,
-            name: "vendor-reactRouter",
-            chunks: "all"
-          },
-          styles: {
-            name: "styles",
-            test: /\.(s?(c|a)ss)$/,
-            chunks: "all",
-            enforce: true
-          }
-        }
+        maxInitialRequests: Infinity
       }
     };
-    outputPath = devMode
-      ? path.resolve(process.env.LSP_URL, "public")
-      : path.resolve(process.env.LSP_URL, "dist/public");
+    outputPath = devMode ? paths.appPublic : paths.appDistPublic;
     loaderRules = rules.concat([
       {
         oneOf: [
@@ -151,15 +120,15 @@ module.exports = (name, customPlugins, shouldWatch, cb) => {
             loader: require.resolve("url-loader"),
             options: {
               limit: 10000,
-              name: "public/media/[name].[hash:8].[ext]"
+              name: "static/images/[name].[hash:8].[ext]"
             }
           },
           {
-            test: /\.s?(c|a)ss$/,
+            test: /\.s(c|a)ss$/,
             use: [
               devMode
                 ? require.resolve("style-loader")
-                :  MiniCssExtractPlugin.loader,
+                : MiniCssExtractPlugin.loader,
               {
                 loader: require.resolve("css-loader"),
                 options: {
@@ -183,16 +152,44 @@ module.exports = (name, customPlugins, shouldWatch, cb) => {
             ]
           },
           {
+            test: /\.css$/,
+            use: [
+              devMode
+                ? require.resolve("style-loader")
+                : MiniCssExtractPlugin.loader,
+              require.resolve("css-loader"),
+              {
+                loader: require.resolve("postcss-loader"),
+                options: {
+                  plugins: devMode
+                    ? [
+                        require("autoprefixer"),
+                        require("postcss-import"),
+                        require("postcss-clean")
+                      ]
+                    : []
+                }
+              }
+            ]
+          },
+          {
             test: /\.svg$/,
             loader: require.resolve("raw-loader")
           },
           {
+            test: /\.((o|t)tf|woff2?)$/,
+            loader: require.resolve("file-loader"),
+            options: {
+              name: "static/fonts/[name].[hash:8].[ext]"
+            }
+          },
+          {
             exclude: [
-              /\.(m?jsx?|html|json|s?(c|a)ss|bmp|gif|jpe?g|svg|png|ejs)$/
+              /\.((m|e)?js(x|on)?|html|s?(c|a)ss|bmp|gif|jpe?g|svg|png|(o|t)tf|woff2?)$/
             ],
             loader: require.resolve("file-loader"),
             options: {
-              name: "public/media/[name].[hash:8].[ext]"
+              name: "static/[name].[hash:8].[ext]"
             }
           }
         ]
@@ -206,7 +203,8 @@ module.exports = (name, customPlugins, shouldWatch, cb) => {
         chunkFilename: devMode ? `[name].css` : `[hash].[name].css`
       }),
       new WebpackAssetsManifest({
-        writeToFileEmit: true
+        writeToFileEmit: true,
+        fileName: "static/manifest.json"
       }),
       new StyleLintPlugin({
         syntax: "scss"
@@ -235,7 +233,7 @@ module.exports = (name, customPlugins, shouldWatch, cb) => {
       path: outputPath,
       filename: devMode ? `${name}.[name].js` : `${name}.[hash].[name].js`,
       chunkFilename: devMode ? `${name}.[name].js` : `${name}.[hash].[name].js`,
-      publicPath: "/"
+      publicPath: `/`
     },
     module: {
       rules: loaderRules

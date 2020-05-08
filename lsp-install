@@ -1,9 +1,11 @@
 #!/bin/bash
 
 CWD="$PWD"
-sudo apt-get update
-sudo apt-get dist-upgrade -y
-sudo apt-get -y install php-fpm php-mysql php php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip
+read -p "update?" yn
+if $yn in [Yy]* ) sudo apt update;
+read -p "upgrade?" yn
+if $yn in [Yy]* ) sudo apt full-upgrade -y;
+sudo apt -y install php-fpm php-mysql php php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip
 # Download and install wp-cli
 wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 sudo chmod +x wp-cli.phar
@@ -42,19 +44,6 @@ case $yn in
   sudo mysql -e "CREATE DATABASE $DB DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; GRANT ALL ON $DB.* TO '$USER'@'localhost' IDENTIFIED BY '$PW'; FLUSH PRIVILEGES;"
   ;;
 esac;
-wp core download --skip-content
-sed -i "s/database_name_here/$DB/;s/username_here/$USER/;s/password_here/$PW/" wp-config-sample.php
-SALT_START=$(awk "/'AUTH_KEY'/{ print NR; exit}" wp-config-sample.php)
-head -$((SALT_START-1)) wp-config-sample.php > wp-config.php
-echo "define('FS_METHOD', 'direct');" >> wp-config.php
-echo "define('WP_ALLOW_MULTISITE', true);" >> wp-config.php
-curl -s https://api.wordpress.org/secret-key/1.1/salt/ | head -1 | sed "s/'AUTH_KEY'/'JWT_AUTH_SECRET_KEY'/" >> wp-config.php
-echo "define('JWT_AUTH_CORS_ENABLE', true);" >> wp-config.php
-curl -s https://api.wordpress.org/secret-key/1.1/salt/ >> wp-config.php
-tail +$((SALT_START+8)) wp-config-sample.php >> wp-config.php
-sudo rm -f wp-config-sample.php
-sudo rsync -avzru $CWD/lsp-start /usr/local/bin/lsp-start
+./lsp-wp-install $DB $USER $PW LSP_WP
 cd LSP_UI
 yarn;
-cd example.com
-yarn start;
