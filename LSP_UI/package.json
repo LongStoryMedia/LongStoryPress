@@ -137,7 +137,7 @@
     "react-loadable": "^5.5.0",
     "react-router-dom": "^5.1.2",
     "react-svg-inline": "^2.1.1",
-    "serialize-javascript": "^1.5.0",
+    "serialize-javascript": "^3.0.0",
     "universal-cookie": "^3.0.4"
   },
   "resolutions": {
