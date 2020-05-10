@@ -80,7 +80,7 @@ export default ({
     site: sendIf({ item: item.site }),
     contact: sendIf({ item: item.contact }),
     colors: sendIf({ item: item.colors }),
-    lsp_sliders: sendIf({ item: item.lsp_sliders }),
+    lsp_gallerys: sendIf({ item: item.lsp_gallerys }),
     lsp_gallery: sendIf({ item: item.lsp_gallery }),
     children: sendIf({ item: item.children })
   });

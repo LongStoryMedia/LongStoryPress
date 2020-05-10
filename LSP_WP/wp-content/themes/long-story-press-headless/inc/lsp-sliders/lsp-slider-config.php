@@ -1,15 +1,15 @@
 <?php
 
-function lsp_slider_meta_box_config() {
+function lsp_gallery_meta_box_config() {
   return new LSP_MB([
-    'id' => 'lsp_slider_settings',
-    'title' => esc_html__('Slider Settings', 'lsp'),
-    'post_types' => ['lsp_slider'],
+    'id' => 'lsp_gallery_settings',
+    'title' => esc_html__('Gallery Settings', 'lsp'),
+    'post_types' => ['lsp_gallery'],
     'context' => 'advanced',
     'priority' => 'high',
     'autosave' => true,
     'assets_url' => 'assets',
-    'rest_base' => 'sliders',
+    'rest_base' => 'gallerys',
     'fields' => [
       [
         'id' => 'lightbox',
@@ -20,10 +20,10 @@ function lsp_slider_meta_box_config() {
         'value' => 'lightbox',
       ],
       [
-        'id' => 'slider_gallery',
+        'id' => 'gallery_gallery',
         'type' => 'media',
-        'name' => esc_html__('Slider Gallery', 'lsp'),
-        'description' => esc_html__('upload images to this slider', 'lsp'),
+        'name' => esc_html__('Gallery Gallery', 'lsp'),
+        'description' => esc_html__('upload images to this gallery', 'lsp'),
         'attributes' => [
           'caption' => 'image caption',
           'link' => 'link',
@@ -35,7 +35,7 @@ function lsp_slider_meta_box_config() {
         'id' => 'auto',
         'name' => esc_html__('Auto Play', 'lsp'),
         'type' => 'checkbox',
-        'description' => esc_html__('automatically start slider', 'lsp'),
+        'description' => esc_html__('automatically start gallery', 'lsp'),
         'checked' => false,
         'value' => 'auto',
       ],
@@ -55,7 +55,7 @@ function lsp_slider_meta_box_config() {
         'id' => 'transitionspeed',
         'type' => 'number',
         'name' => esc_html__('Transition Speed', 'lsp'),
-        'description' => esc_html__('speed at which the slider changes from one image to the next', 'lsp'),
+        'description' => esc_html__('speed at which the gallery changes from one image to the next', 'lsp'),
         'std' => '1',
         'placeholder' => esc_html__('1', 'lsp'),
         'min' => '0.01',
@@ -228,5 +228,5 @@ function lsp_slider_meta_box_config() {
   ]);
 }
 
-add_action('save_post', [lsp_slider_meta_box_config(), 'lsp_save_meta_box'], 1, 2);
-add_action('add_meta_boxes', [lsp_slider_meta_box_config(), 'lsp_add_meta_box']);
+add_action('save_post', [lsp_gallery_meta_box_config(), 'lsp_save_meta_box'], 1, 2);
+add_action('add_meta_boxes', [lsp_gallery_meta_box_config(), 'lsp_add_meta_box']);

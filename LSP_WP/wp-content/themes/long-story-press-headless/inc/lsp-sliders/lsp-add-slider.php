@@ -1,9 +1,9 @@
 <?php
 
-function lsp_match_slider_shortcode()
+function lsp_match_gallery_shortcode()
 {
     preg_match_all(
-    '"'.get_shortcode_regex(['lsp-slider']).'"',
+    '"'.get_shortcode_regex(['lsp-gallery']).'"',
     get_the_content(),
     $matches
   );
@@ -19,8 +19,8 @@ function lsp_json_parse_shortcode($attstostring)
         '/&\d=/' => function ($match) {
             return preg_replace('/&\d=/', ' ', $match[0]);
         },
-        '/lsp-slider\s/' => function ($match) {
-            return str_replace('lsp-slider ', '', $match[0]);
+        '/lsp-gallery\s/' => function ($match) {
+            return str_replace('lsp-gallery ', '', $match[0]);
         },
         '/\s/' => function ($match) {
             return str_replace(' ', ',', $match[0]);
@@ -68,49 +68,49 @@ function lsp_json_parse_shortcode($attstostring)
     return $parsed_atts;
 }
 
-function lsp_create_rest_response_from_slider_shortcode($atts)
+function lsp_create_rest_response_from_gallery_shortcode($atts)
 {
     global $post;
     register_rest_field(
         get_post_type($post),
-        'lsp_sliders',
+        'lsp_gallerys',
         [
             'get_callback' => function ($post) {
-                $lsp_sliders = array();
+                $lsp_gallerys = array();
                 $defaults = [
                   'slug' => '',
                   'in-content' => false,
                   'in-background' => true,
                   'position' => 'top',
                 ];
-                $matches = lsp_match_slider_shortcode();
+                $matches = lsp_match_gallery_shortcode();
                 foreach ($matches as $shortcode) {
                     $sc = lsp_json_parse_shortcode($shortcode);
                     // log_console("sc", $sc);
                     $atts_arr = array();
-                    $this_slider = get_posts([
+                    $this_gallery = get_posts([
                       'name' => $sc['slug'],
-                      'post_type' => 'lsp_slider',
+                      'post_type' => 'lsp_gallery',
                       'post_status' => 'publish',
                       'numberposts' => 1,
                     ]);
-                    if ($this_slider) {
-                        $atts_arr['id'] = $this_slider[0]->ID;
-                        $atts_arr['slider_gallery'] = lsp_gallery_rest_cb($this_slider[0]);
-                        $atts_arr['slider_data'] = get_post_meta($this_slider[0]->ID, 'lsp_slider_settings', true);
+                    if ($this_gallery) {
+                        $atts_arr['id'] = $this_gallery[0]->ID;
+                        $atts_arr['gallery_gallery'] = lsp_gallery_rest_cb($this_gallery[0]);
+                        $atts_arr['gallery_data'] = get_post_meta($this_gallery[0]->ID, 'lsp_gallery_settings', true);
                     }
-                    $slider_rest = array_merge($defaults, $atts_arr, $sc);
+                    $gallery_rest = array_merge($defaults, $atts_arr, $sc);
                         // log_
-                    $lsp_sliders[] = $slider_rest;
-                    // log_console("lsp_sliders", $lsp_sliders);
+                    $lsp_gallerys[] = $gallery_rest;
+                    // log_console("lsp_gallerys", $lsp_gallerys);
                 }
-                return $lsp_sliders;
+                return $lsp_gallerys;
             },
             'schema' => null,
         ]
     );
     // log_console("comment", json_encode(lsp_json_parse_shortcode(http_build_query($atts))));
-    return '<!--lsp_slider:'.json_encode(lsp_json_parse_shortcode(http_build_query($atts))).'-->';
+    return '<!--lsp_gallery:'.json_encode(lsp_json_parse_shortcode(http_build_query($atts))).'-->';
 }
 
-add_shortcode('lsp-slider', 'lsp_create_rest_response_from_slider_shortcode');
+add_shortcode('lsp-gallery', 'lsp_create_rest_response_from_gallery_shortcode');

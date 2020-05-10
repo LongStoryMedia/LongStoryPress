@@ -104,16 +104,16 @@ $r: calc(1em + 1vmin);
     width: 0;
     opacity: 0;
     font-size: 60%;
-    padding: 0.5em;
-    border-radius: 0.5em;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
     z-index: 2;
     @if $right {
-      left: 3.5em;
-      bottom: -1.25em;
+      left: 2.5rem;
+      bottom: 0;
     }
     @if $bottom {
       left: 0;
-      bottom: -4em;
+      bottom: -4rem;
     }
   }
 
@@ -128,36 +128,31 @@ $r: calc(1em + 1vmin);
     opacity: 0;
     z-index: 2;
     @if $right {
-      left: 1.75em;
-      bottom: 0;
+      left: 2.25rem;
+      bottom: 1.15rem;
     }
     @if $bottom {
-      bottom: -1em;
+      bottom: -1rem;
     }
   }
 
   &:hover {
-    width: 1.25em;
-    height: 1.25em;
-
     &:after {
       transition-delay: 0.4s;
-      height: 3.5em;
-      width: 7em;
+      height: 3rem;
+      width: 6rem;
       opacity: 1;
     }
 
     &:before {
       transition-delay: 0.4s;
-      height: 0.35em;
-      width: 0.35em;
+      height: 0.75rem;
+      width: 0.75rem;
       opacity: 1;
     }
   }
 }
-@mixin simpleunderline(
-  $text-decoration: none
-) {
+@mixin simpleunderline($text-decoration: none) {
   position: relative;
   text-decoration: $text-decoration;
   @include threeDtxt($size: 1);
@@ -182,11 +177,7 @@ $r: calc(1em + 1vmin);
     }
   }
 }
-@mixin underline(
-  $font-size: 1em,
-  $text-decoration: none,
-  $simple-override: 0
-) {
+@mixin underline($font-size: 1em, $text-decoration: none, $simple-override: 0) {
   & > * {
     @include threeDtxt($size: 1);
     @include transition;
@@ -439,5 +430,6 @@ $r: calc(1em + 1vmin);
   animation-duration: 1.4s;
 }
 @mixin pulseFloat {
-  animation: float 15s linear 0s 1, twirl 30s ease-in-out 10s infinite, pulse 3s linear 15s infinite;
+  animation: float 15s linear 0s 1, twirl 30s ease-in-out 10s infinite,
+    pulse 3s linear 15s infinite;
 }

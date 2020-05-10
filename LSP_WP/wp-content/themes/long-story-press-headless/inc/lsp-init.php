@@ -17,8 +17,8 @@ require_once __DIR__.'/lsp-rest/lsp-attachments-controller.php';
 require_once __DIR__.'/lsp-rest/lsp-rest-menus.php';
 require_once __DIR__.'/lsp-meta-box/lsp-meta-box.php';
 require_once __DIR__.'/lsp-tutorial-cpt.php';
-require_once __DIR__.'/lsp-sliders/lsp-slider-cpt.php';
-require_once __DIR__.'/lsp-sliders/lsp-add-slider.php';
+require_once __DIR__.'/lsp-gallerys/lsp-gallery-cpt.php';
+require_once __DIR__.'/lsp-gallerys/lsp-add-gallery.php';
 require_once __DIR__.'/lsp-add-preview-link-to-subpage.php';
 
 add_action('init', function () {

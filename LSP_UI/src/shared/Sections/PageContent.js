@@ -8,7 +8,7 @@ import Gallery from "react-gallery-designer";
 
 const getMetaImg = (props) =>
   _$(props).OBJ(["data", "body", "lsp_gallery", 0]) ||
-  _$(props).OBJ(["data", "body", "lsp_sliders", 0, "slider_gallery", 0, "src"]);
+  _$(props).OBJ(["data", "body", "lsp_gallerys", 0, "gallery_gallery", 0, "src"]);
 
 export default (WC) =>
   isomorphic(
@@ -16,7 +16,7 @@ export default (WC) =>
       constructor(props) {
         super(props);
         this.state = {
-          sliderShortCodes: [],
+          galleryShortCodes: [],
           parsedContent: renderMarkup({ markup: this.props.data.body.content }),
           metaImg: getMetaImg(this.props),
         };
@@ -24,60 +24,60 @@ export default (WC) =>
       componentDidMount() {
         const { content } = this.props.data.body;
         if (!this.state.metaImg) getMetaImg(this.props);
-        if (content && content.match(/<!--lsp_slider:(.+?)-->/gi)) {
-          this.sliders(content.match(/<!--lsp_slider:(.+?)-->/gi));
+        if (content && content.match(/<!--lsp_gallery:(.+?)-->/gi)) {
+          this.gallerys(content.match(/<!--lsp_gallery:(.+?)-->/gi));
         }
         // this.setState({ parsedContent: renderMarkup(content) });
       }
       componentDidUpdate(prevProps, prevState) {
-        const { sliderData } = this.state;
+        const { galleryData } = this.state;
         const { data, location } = this.props;
         const content = _$(data).OBJ(["body", "content"]);
         if (
           data !== prevProps.data ||
           location.pathname !== prevProps.location.pathname
         ) {
-          if (content.match(/<!--lsp_slider:(.+?)-->/gi)) {
-            this.sliders(content.match(/<!--lsp_slider:(.+?)-->/gi));
+          if (content.match(/<!--lsp_gallery:(.+?)-->/gi)) {
+            this.gallerys(content.match(/<!--lsp_gallery:(.+?)-->/gi));
           }
           this.setState({ parsedContent: renderMarkup({ markup: content }) });
         }
-        if (sliderData !== prevState.sliderData) {
-          const sreg = new RegExp("<!--(lsp_slider:{.+?})-->");
+        if (galleryData !== prevState.galleryData) {
+          const sreg = new RegExp("<!--(lsp_gallery:{.+?})-->");
           const splitContent = content.split(sreg);
           let i = 0;
-          const sliderInject = splitContent.map((html, idx) => {
-            if (/^lsp_slider/.test(html)) {
+          const galleryInject = splitContent.map((html, idx) => {
+            if (/^lsp_gallery/.test(html)) {
               const idx = i++;
-              const shortcode = JSON.parse(html.replace("lsp_slider:", ""));
+              const shortcode = JSON.parse(html.replace("lsp_gallery:", ""));
               const position = shortcode["in-content"]
                 ? {
                     position: "relative",
                   }
                 : {
                     position: "absolute",
-                    top: sliderData[idx].position === "top" ? 0 : "",
-                    bottom: sliderData[idx].position === "bottom" ? 0 : "",
+                    top: galleryData[idx].position === "top" ? 0 : "",
+                    bottom: galleryData[idx].position === "bottom" ? 0 : "",
                     left: 0,
                   };
               return (
                 <Gallery
                   {...this.props}
-                  className={[styles.slider, shortcode.slug].join(" ")}
-                  settings={sliderData[idx].settings}
-                  images={sliderData[idx].images}
+                  className={[styles.gallery, shortcode.slug].join(" ")}
+                  settings={galleryData[idx].settings}
+                  images={galleryData[idx].images}
                   key={`${shortcode.slug}-${idx}`}
-                  id={`${sliderData[idx].slug}-slider-${idx}`}
+                  id={`${galleryData[idx].slug}-gallery-${idx}`}
                   style={{
                     ...position,
-                    ...sliderData[idx].style,
+                    ...galleryData[idx].style,
                   }}
                   imgStyle={{
-                    ...sliderData[idx].imgStyle,
-                    width: sliderData[idx].imgWidth || "100%",
-                    height: sliderData[idx].imgHeight || "",
+                    ...galleryData[idx].imgStyle,
+                    width: galleryData[idx].imgWidth || "100%",
+                    height: galleryData[idx].imgHeight || "",
                   }}
-                  contain={sliderData[idx].contain}
+                  contain={galleryData[idx].contain}
                   suppressHydrationWarning={true}
                 />
               );
@@ -85,19 +85,19 @@ export default (WC) =>
             return renderMarkup({ markup: html, i: idx });
           });
           this.setState({
-            parsedContent: sliderInject,
+            parsedContent: galleryInject,
           });
         }
       }
 
-      sliders = (sliders) => {
+      gallerys = (gallerys) => {
         const { clientWidth } = this.props;
-        const { lsp_sliders } = this.props.data.body;
+        const { lsp_gallerys } = this.props.data.body;
         this.setState({
-          sliderData: sliders.map((s, i) => {
+          galleryData: gallerys.map((s, i) => {
             const shortcode = JSON.parse(s.match(/({.+?})-->/)[1]);
-            const slider = lsp_sliders[i];
-            const { slider_data, slider_gallery } = slider;
+            const gallery = lsp_gallerys[i];
+            const { gallery_data, gallery_gallery } = gallery;
             const width = _$(shortcode).OBJ(["style", "width"]);
             const containerWidth = width
               ? /px/gi.test(width)
@@ -106,27 +106,27 @@ export default (WC) =>
               : clientWidth;
             return {
               slug: shortcode.slug,
-              position: slider.position,
+              position: gallery.position,
               inContent: shortcode["in-content"],
               imgWidth: shortcode["img-width"],
               imgHeight: shortcode["img-height"],
               style: shortcode.style,
-              settings: slider_data,
-              images: slider_gallery.map((img) => {
+              settings: gallery_data,
+              images: gallery_gallery.map((img) => {
                 const { sizes, image_meta } = img.media_details;
                 return {
                   name: img.name,
                   alt: img.alt,
                   mimeType: img.mime_type,
-                  src: !slider_data.originalsize
-                    ? containerWidth > 1024 && sizes.slider_hd
-                      ? sizes.slider_hd.source_url
-                      : containerWidth > 768 && sizes.slider_large
-                      ? sizes.slider_large.source_url
-                      : containerWidth > 480 && sizes.slider_medium
-                      ? sizes.slider_medium.source_url
-                      : sizes.slider_small
-                      ? sizes.slider_small.source_url
+                  src: !gallery_data.originalsize
+                    ? containerWidth > 1024 && sizes.gallery_hd
+                      ? sizes.gallery_hd.source_url
+                      : containerWidth > 768 && sizes.gallery_large
+                      ? sizes.gallery_large.source_url
+                      : containerWidth > 480 && sizes.gallery_medium
+                      ? sizes.gallery_medium.source_url
+                      : sizes.gallery_small
+                      ? sizes.gallery_small.source_url
                       : img.src
                     : containerWidth > 1024 && sizes.hd
                     ? sizes.hd.source_url
@@ -139,9 +139,9 @@ export default (WC) =>
                     : img.src,
                   srcset: img.srcset,
                   sizes: img.sizes,
-                  placeholder: !slider_data.originalsize
-                    ? sizes.slider_thumb
-                      ? sizes.slider_thumb.source_url
+                  placeholder: !gallery_data.originalsize
+                    ? sizes.gallery_thumb
+                      ? sizes.gallery_thumb.source_url
                       : img.src
                     : sizes.thumbnail
                     ? sizes.thumbnail.source_url

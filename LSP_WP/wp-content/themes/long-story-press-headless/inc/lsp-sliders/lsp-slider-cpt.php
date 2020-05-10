@@ -4,26 +4,26 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-function lsp_slider_post_type()
+function lsp_gallery_post_type()
 {
 
     $labels = [
-        'name' => _x('Sliders', 'Sliders name', 'lsp'),
-        'singular_name' => _x('Slider', 'Slider name', 'lsp'),
-        'menu_name' => _x('Sliders', 'admin menu', 'lsp'),
-        'add_new' => _x('Add Slider', 'Slider', 'lsp'),
-        'all_items' => __('Sliders', 'lsp'),
-        'add_new_item' => __('Add Slider', 'lsp'),
-        'edit_item' => __('Edit Slider', 'lsp'),
-        'new_item' => __('New Slider', 'lsp'),
-        'view_item' => __('View Slider', 'lsp'),
-        'search_items' => __('Search Sliders', 'lsp'),
-        'not_found' => __('Slider Not Found', 'lsp'),
-        'not_found_in_trash' => __('No sliders found in trash', 'lsp'),
+        'name' => _x('Gallerys', 'Gallerys name', 'lsp'),
+        'singular_name' => _x('Gallery', 'Gallery name', 'lsp'),
+        'menu_name' => _x('Gallerys', 'admin menu', 'lsp'),
+        'add_new' => _x('Add Gallery', 'Gallery', 'lsp'),
+        'all_items' => __('Gallerys', 'lsp'),
+        'add_new_item' => __('Add Gallery', 'lsp'),
+        'edit_item' => __('Edit Gallery', 'lsp'),
+        'new_item' => __('New Gallery', 'lsp'),
+        'view_item' => __('View Gallery', 'lsp'),
+        'search_items' => __('Search Gallerys', 'lsp'),
+        'not_found' => __('Gallery Not Found', 'lsp'),
+        'not_found_in_trash' => __('No gallerys found in trash', 'lsp'),
       ];
     $args = [
         'labels' => $labels,
-        'description' => __( 'Data input for sliders. Select from available sliders within any post (or page) edit screen and indicate where it should be placed', 'lsp' ),
+        'description' => __( 'Data input for gallerys. Select from available gallerys within any post (or page) edit screen and indicate where it should be placed', 'lsp' ),
         'public' => true,
         'show_in_rest' => true,
         'has_archive' => true,
@@ -35,31 +35,31 @@ function lsp_slider_post_type()
         'supports' => ['title'],
         'menu_position' => 5,
         'exclude_from_search' => false,
-        'rewrite' => ['slug' => 'sliders'],
+        'rewrite' => ['slug' => 'gallerys'],
       ];
-    register_post_type('lsp_slider', $args);
+    register_post_type('lsp_gallery', $args);
     register_taxonomy(
-          'lsp_slider_category',
-          'slider',
+          'lsp_gallery_category',
+          'gallery',
           [
           'hierarchical' => true,
           'labels' => [
-            'name' => 'slider category',
-            'singular_name' => 'slider category',
+            'name' => 'gallery category',
+            'singular_name' => 'gallery category',
           ],
         ]
       );
     register_taxonomy(
-          'slider_tag',
-          'slider',
+          'gallery_tag',
+          'gallery',
           [
           'hierarchical' => false,
           'labels' => [
-            'name' => 'slider tag',
-            'singular_name' => 'slider tag',
+            'name' => 'gallery tag',
+            'singular_name' => 'gallery tag',
           ],
         ]
       );
 }
-add_action('init', 'lsp_slider_post_type');
-require_once __DIR__.'/lsp-slider-config.php';
+add_action('init', 'lsp_gallery_post_type');
+require_once __DIR__.'/lsp-gallery-config.php';

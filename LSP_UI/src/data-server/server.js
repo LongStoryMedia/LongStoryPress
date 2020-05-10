@@ -77,8 +77,8 @@ export default config => {
     endpoint({ type: "types", path: "wp/v2/types" })(config)
   );
   app.use(
-    "/lsp-api/sliders",
-    endpoint({ type: "sliders", path: "lsp-api/v1/sliders" })(config)
+    "/lsp-api/gallerys",
+    endpoint({ type: "gallerys", path: "lsp-api/v1/gallerys" })(config)
   );
   app.use(
     "/lsp-api/menus",

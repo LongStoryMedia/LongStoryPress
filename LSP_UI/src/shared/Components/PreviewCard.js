@@ -17,6 +17,7 @@ export default ({
   style,
   contain,
   srcset,
+  children
 }) => (
   <div
     className={[styles.contentBox, className, "background_background_one"].join(
@@ -33,11 +34,11 @@ export default ({
         placeHolder={placeHolder ? placeHolder : featuredMedia}
         srcset={srcset}
         tag="div"
-        lazy={false}
+        lazy={true}
       >
         {title && (
           <span className={[styles.title, titleStyles].join(" ")}>{title}</span>
-        )}
+        )}{children}
       </ImageDesigner>
     ) : (
       <div className={styles.title} style={{ opacity: 1 }}>

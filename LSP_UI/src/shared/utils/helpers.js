@@ -16,13 +16,17 @@ export const filterManifest = (manifest, test, tag) => {
     .join("");
 };
 
-const createMarkup = (sanitaryMarkup) => ({ __html: sanitaryMarkup });
-
-export const renderMarkup = ({ markup, i, className, style }) => (
-  <span
+export const renderMarkup = ({
+  markup,
+  i,
+  className,
+  style,
+  HtmlElement = "span",
+}) => (
+  <HtmlElement
     key={i}
     className={className}
-    dangerouslySetInnerHTML={createMarkup(markup)}
+    dangerouslySetInnerHTML={{ __html: markup }}
     style={style}
   />
 );
