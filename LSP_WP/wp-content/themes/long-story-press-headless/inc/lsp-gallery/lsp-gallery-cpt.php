@@ -19,11 +19,11 @@ function lsp_gallery_post_type()
         'view_item' => __('View Gallery', 'lsp'),
         'search_items' => __('Search Gallerys', 'lsp'),
         'not_found' => __('Gallery Not Found', 'lsp'),
-        'not_found_in_trash' => __('No gallerys found in trash', 'lsp'),
+        'not_found_in_trash' => __('No galleries found in trash', 'lsp'),
       ];
     $args = [
         'labels' => $labels,
-        'description' => __( 'Data input for gallerys. Select from available gallerys within any post (or page) edit screen and indicate where it should be placed', 'lsp' ),
+        'description' => __( 'Data input for galleries. Select from available galleries within any post (or page) edit screen and indicate where it should be placed', 'lsp' ),
         'public' => true,
         'show_in_rest' => true,
         'has_archive' => true,
@@ -35,7 +35,7 @@ function lsp_gallery_post_type()
         'supports' => ['title'],
         'menu_position' => 5,
         'exclude_from_search' => false,
-        'rewrite' => ['slug' => 'gallerys'],
+        'rewrite' => ['slug' => 'galleries'],
       ];
     register_post_type('lsp_gallery', $args);
     register_taxonomy(

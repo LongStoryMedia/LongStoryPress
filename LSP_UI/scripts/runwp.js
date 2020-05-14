@@ -10,7 +10,7 @@ exec(
     paths.appRoot,
     "..",
     "LSP_WP"
-  )} --allow-root`,
+  )} --port=9999 --allow-root`,
   {
     shell: "/bin/bash"
   },

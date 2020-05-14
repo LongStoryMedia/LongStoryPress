@@ -8,7 +8,6 @@
 *.py
 *.phar
 *.cache
-*.prettierrc
 
 wp-config.php
 wp-blog-header.php
@@ -36,7 +35,6 @@ LSP_WP/wp-content/uploads/
 LSP_WP/wp-content/plugins/
 LSP_WP/wp-content/mu-plugins/
 LSP_WP/wp-content/wp-cache-config.php
-# LSP_WP/wp-content/**
 LSP_WP/wp-admin**
 LSP_WP/wp-includes**
 

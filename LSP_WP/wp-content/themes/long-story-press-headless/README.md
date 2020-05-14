@@ -1,6 +1,6 @@
 # long-story-press-headless
 
-Very simple WP theme exclusively for admin. It has some custom APIs for site settings (contact, theme colors, mission statement, etc.) that are routed to the WP rest API, optional gallerys to add to specific pages (this is a work in progress), and one additional post type (tutorials).
+Very simple WP theme exclusively for admin. It has some custom APIs for site settings (contact, theme colors, mission statement, etc.) that are routed to the WP rest API, optional galleries to add to specific pages (this is a work in progress), and one additional post type (tutorials).
 
 The rest are functions to handle CORS, and rest API routing. This is to be coupled with [LSP_UI](https://github.com/LongStoryMedia/LongStoryPress/tree/master/LSP_UI), which contains the headless frontend multisite theme and a [Node.js](https://nodejs.org/en/) API server with nginx as the reverse proxy and WP server.
 

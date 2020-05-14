@@ -4,20 +4,13 @@ import isomorphic from "./utils/isomorphic";
 import _$ from "long-story-library";
 
 export default isomorphic(
-  ({
-    data,
-    style,
-    className,
-    menuItemClass,
-    onClick,
-  }) => (
-    <nav
-      className={className}
-      style={style}
-    >
-      {_$(data)
-        .OBJ(["body", "content"])
-        .map(({ slug, id, title, icon }) => (
+  ({ data, style, className, menuItemClass, onClick }) => {
+    const content = _$(data).OBJ(["body", "content"]) || [
+      { slug: "", id: "", title: "", icon: "" },
+    ];
+    return (
+      <nav className={className} style={style}>
+        {content.map(({ slug, id, title, icon }) => (
           <NavLink
             className={menuItemClass}
             onClick={onClick}
@@ -28,7 +21,8 @@ export default isomorphic(
             {icon ? icon : title}
           </NavLink>
         ))}
-    </nav>
-  ),
+      </nav>
+    );
+  },
   { param: ["menu"] }
 );

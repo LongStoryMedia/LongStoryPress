@@ -88,10 +88,8 @@ function lsp_gallery_rest_cb($post)
         $gal_ids,
         false
     );
-    // log_console("captions", $captions);
     if (array_sum($ids) > 0) {
         foreach (array_values($ids) as $key => $img_id) {
-            // log_console("image id", $img_id);
             $attachment_post = get_post($img_id);
             if (is_null($attachment_post)) {
                 continue;
@@ -128,14 +126,7 @@ function lsp_gallery_rest_cb($post)
                     preg_replace('/768px$/', '300px', wp_get_attachment_image_sizes((int) $img_id)),
                     "768px"
                 ])),
-                // 'srcset'             => wp_calculate_image_srcset(
-                //                           [$attachment[1], $attachment[2]],
-                //                           $attachment[0],
-                //                           wp_get_attachment_metadata($img_id),
-                //                           $img_id
-                //                         )
             );
-            // log_console("captions", $captions);
 
             if (empty($gallery[$key]['media_details'])) {
                 $gallery['media_details'] = new stdClass;

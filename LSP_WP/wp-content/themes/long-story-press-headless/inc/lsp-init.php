@@ -17,8 +17,8 @@ require_once __DIR__.'/lsp-rest/lsp-attachments-controller.php';
 require_once __DIR__.'/lsp-rest/lsp-rest-menus.php';
 require_once __DIR__.'/lsp-meta-box/lsp-meta-box.php';
 require_once __DIR__.'/lsp-tutorial-cpt.php';
-require_once __DIR__.'/lsp-gallerys/lsp-gallery-cpt.php';
-require_once __DIR__.'/lsp-gallerys/lsp-add-gallery.php';
+require_once __DIR__.'/lsp-gallery/lsp-gallery-cpt.php';
+require_once __DIR__.'/lsp-gallery/lsp-add-gallery.php';
 require_once __DIR__.'/lsp-add-preview-link-to-subpage.php';
 
 add_action('init', function () {
@@ -71,7 +71,8 @@ function lsp_load_global($hook)
 {
     $lsp_global_ver  = date("ymd-Gis", filemtime(get_template_directory().'/assets/lspGlobal.js'));
     wp_enqueue_style('lsp_colors', lsp_global_assets()['url'].'/admin-colors.css', array(), $lsp_global_ver);
-    wp_enqueue_script('L$', lsp_global_assets()['content'].'/assets/lspGlobal.js', array(), $lsp_global_ver);
+    wp_register_script( '_$', 'https://unpkg.com/long-story-library/umd/long-story-library.min.js', null, null, true );
+    wp_enqueue_script('_$');
 }
 
 add_action('admin_enqueue_scripts', 'lsp_load_global');

@@ -27,10 +27,10 @@ const localServerAddress = nets[selectedInterface].filter(
 )[0].address;
 
 require("../config/env");
-process.env.LSP_LAN_IP = `${localServerAddress}`;
-process.env.NODE_PATH = `${path.resolve(process.env.LSP_URL)}`;
+process.env.LSP_LAN_IP = localServerAddress;
+process.env.NODE_PATH = path.resolve(process.env.LSP_URL);
 if (localWP) {
-  process.env.LSP_ADMIN = `http://localhost`;
+  process.env.LSP_ADMIN = `http://localhost:9999`;
   process.env.LSP_WP_SITE_NAME = "localhost";
 } else {
   process.env.LSP_ADMIN = `https://${process.env.LSP_URL.split(".")[0]}.${

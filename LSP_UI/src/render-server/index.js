@@ -106,7 +106,7 @@ app.get("*", async (req, res) => {
   const context = { data };
   const metaImg = _$(data).OBJ(
     ["body", "lsp_gallery", 0],
-    _$(data).OBJ(["body", "lsp_gallerys", 0, "gallery_gallery", 0])
+    _$(data).OBJ(["body", "lsp_galleries", 0, "gallery_images", 0])
   );
   const title = _$(data).OBJ(["head", "title"], "");
   const content = _$(data).OBJ(["body", "content"], "");

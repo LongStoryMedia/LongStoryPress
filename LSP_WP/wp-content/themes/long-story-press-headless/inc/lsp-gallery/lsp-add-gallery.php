@@ -13,17 +13,17 @@ function lsp_match_gallery_shortcode()
 function lsp_json_parse_shortcode($attstostring)
 {
     $parsed_sc = preg_replace_callback_array([
-        '/&\D/' => function ($match) {
-            return str_replace('&', ',', $match[0]);
-        },
-        '/&\d=/' => function ($match) {
-            return preg_replace('/&\d=/', ' ', $match[0]);
-        },
+        // '/&\D/' => function ($match) {
+        //     return str_replace('&', ',', $match[0]);
+        // },
+        // '/&\d=/' => function ($match) {
+        //     return preg_replace('/&\d=/', ' ', $match[0]);
+        // },
         '/lsp-gallery\s/' => function ($match) {
             return str_replace('lsp-gallery ', '', $match[0]);
         },
-        '/\s/' => function ($match) {
-            return str_replace(' ', ',', $match[0]);
+        '/(\s|\+)/' => function ($match) {
+            return preg_replace('/(\s|\=)/', ',', $match[0]);
         },
         '/:((,)?([^,;])?)*?;/' => function ($match) {
             return str_replace(',', ' ', $match[0]);
@@ -57,6 +57,7 @@ function lsp_json_parse_shortcode($attstostring)
             foreach ($style_arr as $style) {
                 parse_str($style, $out);
                 $styles[array_keys($out)[0]] = $out[array_keys($out)[0]];
+                // log_console("style = ", array_keys($out)[0].":".$styles[array_keys($out)[0]]);
             }
             // log_console("val?", $val);
         }
@@ -73,10 +74,10 @@ function lsp_create_rest_response_from_gallery_shortcode($atts)
     global $post;
     register_rest_field(
         get_post_type($post),
-        'lsp_gallerys',
+        'lsp_galleries',
         [
             'get_callback' => function ($post) {
-                $lsp_gallerys = array();
+                $lsp_galleries = array();
                 $defaults = [
                   'slug' => '',
                   'in-content' => false,
@@ -96,15 +97,15 @@ function lsp_create_rest_response_from_gallery_shortcode($atts)
                     ]);
                     if ($this_gallery) {
                         $atts_arr['id'] = $this_gallery[0]->ID;
-                        $atts_arr['gallery_gallery'] = lsp_gallery_rest_cb($this_gallery[0]);
+                        $atts_arr['gallery_images'] = lsp_gallery_rest_cb($this_gallery[0]);
                         $atts_arr['gallery_data'] = get_post_meta($this_gallery[0]->ID, 'lsp_gallery_settings', true);
                     }
                     $gallery_rest = array_merge($defaults, $atts_arr, $sc);
                         // log_
-                    $lsp_gallerys[] = $gallery_rest;
-                    // log_console("lsp_gallerys", $lsp_gallerys);
+                    $lsp_galleries[] = $gallery_rest;
+                    // log_console("lsp_galleries", $lsp_galleries);
                 }
-                return $lsp_gallerys;
+                return $lsp_galleries;
             },
             'schema' => null,
         ]

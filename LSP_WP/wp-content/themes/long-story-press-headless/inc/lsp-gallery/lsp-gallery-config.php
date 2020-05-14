@@ -9,7 +9,7 @@ function lsp_gallery_meta_box_config() {
     'priority' => 'high',
     'autosave' => true,
     'assets_url' => 'assets',
-    'rest_base' => 'gallerys',
+    'rest_base' => 'galleries',
     'fields' => [
       [
         'id' => 'lightbox',
@@ -20,7 +20,7 @@ function lsp_gallery_meta_box_config() {
         'value' => 'lightbox',
       ],
       [
-        'id' => 'gallery_gallery',
+        'id' => 'gallery_images',
         'type' => 'media',
         'name' => esc_html__('Gallery Gallery', 'lsp'),
         'description' => esc_html__('upload images to this gallery', 'lsp'),
