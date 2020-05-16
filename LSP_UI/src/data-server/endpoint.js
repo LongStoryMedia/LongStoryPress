@@ -151,6 +151,7 @@ export default ({
     })
     .post(async (req, res, next) => {
       if (type === "login") {
+        console.log(req.body);
         const { password, username } = req.body;
         const data = await tryCatch(req, res, next, {
           path,

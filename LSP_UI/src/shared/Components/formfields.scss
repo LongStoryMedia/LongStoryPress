@@ -1,0 +1,151 @@
+@import "LSP/static/_required.scss";
+
+.section {
+  width: 90%;
+  display: flex;
+  flex-flow: column;
+  margin: 1em auto;
+}
+
+.question {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-auto-rows: auto;
+  margin: 0.75em 0;
+
+  .radioCheck {
+    grid-area: 2/3/3/1;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-auto-rows: auto;
+    align-items: center;
+  }
+
+  label {
+    border-bottom: 1px $black solid;
+
+    &.spanTwo {
+      grid-column-start: 1;
+      grid-column-end: 4;
+    }
+
+    &.checkBoxLabel {
+      grid-column-start: 2;
+      grid-column-end: 4;
+    }
+
+    &.checkBox,
+    &.radio {
+      @include threeD(inset, $color1: $black, $color2: $lightgrey);
+      @include growfont;
+      border-radius: 5em;
+      width: 1em;
+      height: 1em;
+      position: relative;
+      margin: 0.125em;
+
+      &:after {
+        @include threeD(inset, $size: 4, $color1: $white, $color2: $lightgrey);
+        @include slowtransition;
+        content: "";
+        width: 1em;
+        height: 1em;
+        position: absolute;
+        border: 2px solid $black;
+        opacity: 0;
+      }
+    }
+
+    &.radio {
+      &:after {
+        border-radius: 2em;
+      }
+
+      &:hover::after {
+        opacity: 0.5;
+      }
+    }
+
+    &.checkBox {
+      border-radius: 0.15em;
+      align-self: center;
+
+      &:after {
+        border-top: none;
+        border-right: none;
+        background: transparent;
+        transform: matrix(0.9, -0.75, 0, 0.5, 2.5, -5.5);
+      }
+
+      &:hover::after {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  input,
+  textarea {
+    border: none;
+    border-bottom: 1px $black solid;
+    box-shadow: none;
+    background-color: $lightgrey;
+
+    &:active,
+    &:focus {
+      background-color: $white;
+    }
+
+    &[type="checkbox"] {
+      align-self: center;
+    }
+
+    &[type="checkbox"],
+    &[type="radio"] {
+      display: none;
+
+      &:checked + label:after {
+        opacity: 1;
+      }
+    }
+
+    &[type="radio"]:checked + label:after {
+      width: 0.65em;
+      height: 0.65em;
+      top: 0.125em;
+      left: 0.125em;
+      border-width: 0.375em;
+    }
+  }
+
+  sub {
+    display: block;
+    width: 100%;
+  }
+}
+
+.btnRow {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+
+  .rowBtn {
+    @include eqw(1, 5);
+    @include btn;
+    @include growfont;
+    @include txtBtn;
+    text-align: center;
+    height: 2em;
+
+    &.red {
+      background-color: transparentize($red, 0.75);
+    }
+
+    &.green {
+      background-color: transparentize($green, 0.75);
+    }
+
+    &.blue {
+      background-color: transparentize($blue, 0.75);
+    }
+  }
+}

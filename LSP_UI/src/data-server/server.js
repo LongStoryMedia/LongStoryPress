@@ -19,6 +19,7 @@ require("dotenv").config({
 const app = express();
 
 export default config => {
+  app.set('trust proxy', 1);
   app.use(helmet());
   app.use(compression());
   app.use(timeout(10000));

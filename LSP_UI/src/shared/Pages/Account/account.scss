@@ -1,0 +1,51 @@
+@import "../../static/_required.scss";
+
+.account {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  height: 100%;
+  align-content: start;
+  grid-gap: 2em;
+
+  .contentBox {
+    .reset {
+      @include underline;
+
+      .pwreset {
+        text-decoration: none;
+        @include transition;
+      }
+    }
+  }
+
+  .downloads {
+    .listItem {
+      max-width: 15em;
+      text-decoration: none;
+      color: $black;
+      @include transition;
+      margin: 1em 0;
+      display: block;
+
+      &:hover {
+        @include threeD;
+      }
+    }
+  }
+
+  .rowBtn,
+  .rowBtnRight {
+    @include btn;
+    @include growfont(1em);
+    max-width: 15em;
+    align-self: end;
+    justify-self: end;
+    text-decoration: none;
+    color: $black;
+  }
+
+  .rowBtnRight {
+    float: right;
+  }
+}

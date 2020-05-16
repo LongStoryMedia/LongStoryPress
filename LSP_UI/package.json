@@ -115,20 +115,24 @@
     "connect-timeout": "^1.9.0",
     "cors": "^2.8.4",
     "express": "^4.16.4",
+    "express-session": "^1.17.1",
     "helmet": "^3.14.0",
     "isomorphic-fetch": "^2.2.1",
+    "long-story-library": "^0.0.23",
     "mysql": "^2.16.0",
     "node-gyp": "^3.8.0",
     "node-sass": "^4.10.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-gallery-designer": "^1.4.2",
     "react-helmet": "^5.2.0",
+    "react-helmet-async": "^1.0.6",
     "react-loadable": "^5.5.0",
     "react-router-dom": "^4.3.1",
     "react-svg-inline": "^2.1.1",
     "serialize-javascript": "^1.5.0",
-    "universal-cookie": "^3.0.4",
-    "snyk": "^1.316.1"
+    "snyk": "^1.316.1",
+    "universal-cookie": "^3.0.4"
   },
   "resolutions": {
     "**/event-stream": "^4.0.1"
