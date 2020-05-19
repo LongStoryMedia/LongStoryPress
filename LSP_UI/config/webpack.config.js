@@ -1,17 +1,17 @@
-const webpack = require('webpack')
-const CompressionPlugin = require('compression-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
-const createConfig = require('./createConfig')
-const paths = require('./paths')
-const env = require('./env')(paths.appRoot)
+import { DefinePlugin } from 'webpack'
+import CompressionPlugin from 'compression-webpack-plugin'
+import CleanWebpackPlugin from 'clean-webpack-plugin'
+import createConfig from './createConfig'
+import { appRoot, appPublic, appServer } from './paths'
+const env = require('./env')(appRoot)
 
-module.exports = [
-  createConfig('render-server', [new webpack.DefinePlugin({ __isBrowser__: false })]),
-  createConfig('data-server', [new webpack.DefinePlugin({ __isBrowser__: false })]),
+export default [
+  createConfig('render-server', [new DefinePlugin({ __isBrowser__: false })]),
+  createConfig('data-server', [new DefinePlugin({ __isBrowser__: false })]),
   createConfig('client', [
-    new CleanWebpackPlugin([paths.appPublic, paths.appServer], { root: paths.appRoot }),
-    new webpack.DefinePlugin({ __isBrowser__: true }),
-    new webpack.DefinePlugin(env.stringified),
+    new CleanWebpackPlugin([appPublic, appServer], { root: appRoot }),
+    new DefinePlugin({ __isBrowser__: true }),
+    new DefinePlugin(env.stringified),
     new CompressionPlugin()
   ])
 ]

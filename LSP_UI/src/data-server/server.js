@@ -1,4 +1,4 @@
-import endpoint from "./endpoint";
+import Endpoint from "./endpoint";
 import compression from "compression";
 import helmet from "helmet";
 import bodyParser from "body-parser";
@@ -16,10 +16,10 @@ require("dotenv").config({
   path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`)
 });
 
-const app = express();
-
 export default config => {
-  app.set('trust proxy', 1);
+  const app = express();
+  const router = express.Router();
+  app.set("trust proxy", 1);
   app.use(helmet());
   app.use(compression());
   app.use(timeout(10000));
@@ -35,72 +35,82 @@ export default config => {
 
   app.use(
     "/lsp-api/login",
-    endpoint({ type: "login", path: "jwt-auth/v1/token" })(config)
+    // (req, res) => {}
+    new Endpoint({ type: "login", path: "jwt-auth/v1/token" }, config).getRouter(router)
   );
   app.use(
     "/lsp-api/search",
-    endpoint({
-      type: "search",
-      path: "wp/v2/search",
-      chainAllOptions: false
-    })(config)
+    new Endpoint(
+      {
+        type: "search",
+        path: "wp/v2/search",
+        chainAllOptions: false
+      },
+      config
+    ).getRouter(router)
   );
   app.use(
     "/lsp-api/media",
-    endpoint({ type: "media", path: "lsp-api/v1/media" })(config)
+    new Endpoint({ type: "media", path: "lsp-api/v1/media" }, config).getRouter(router)
   );
   app.use(
     "/lsp-api/pages",
-    endpoint({ type: "pages", path: "lsp-api/v1/pages" })(config)
+    new Endpoint({ type: "pages", path: "lsp-api/v1/pages" }, config).getRouter(router)
   );
   app.use(
     "/lsp-api/posts",
-    endpoint({ type: "posts", path: "lsp-api/v1/posts" })(config)
+    new Endpoint({ type: "posts", path: "lsp-api/v1/posts" }, config).getRouter(router)
   );
   app.use(
     "/lsp-api/tutorials",
-    endpoint({ type: "tutorials", path: "lsp-api/v1/tutorials" })(config)
+    new Endpoint({ type: "tutorials", path: "lsp-api/v1/tutorials" }, config).getRouter(router)
   );
   app.use(
     "/lsp-api/categories",
-    endpoint({ type: "categories", path: "wp/v2/categories" })(config)
+    new Endpoint({ type: "categories", path: "wp/v2/categories" }, config).getRouter(router)
   );
   app.use(
     "/lsp-api/products",
-    endpoint({ type: "products", path: "lsp-api/v1/products" })(config)
+    new Endpoint({ type: "products", path: "lsp-api/v1/products" }, config).getRouter(router)
   );
   app.use(
     "/lsp-api/users",
-    endpoint({ type: "users", path: "wp/v2/users", pwRequired: true })(config)
+    new Endpoint(
+      { type: "users", path: "wp/v2/users", pwRequired: true },
+      config
+    ).getRouter(router)
   );
   app.use(
     "/lsp-api/types",
-    endpoint({ type: "types", path: "wp/v2/types" })(config)
+    new Endpoint({ type: "types", path: "wp/v2/types" }, config).getRouter(router)
   );
   app.use(
     "/lsp-api/galleries",
-    endpoint({ type: "galleries", path: "lsp-api/v1/galleries" })(config)
+    new Endpoint({ type: "galleries", path: "lsp-api/v1/galleries" }, config).getRouter(router)
   );
   app.use(
     "/lsp-api/menus",
-    endpoint({
-      type: "menus",
-      path: "lsp-api/v1/menus",
-      chainAllOptions: false,
-      byQuery: false
-    })(config)
+    new Endpoint(
+      {
+        type: "menus",
+        path: "lsp-api/v1/menus",
+        chainAllOptions: false,
+        byQuery: false
+      },
+      config
+    ).getRouter(router)
   );
   app.use(
     "/lsp-api/taxonomies",
-    endpoint({ type: "taxonomies", path: "wp/v2/taxonomies" })(config)
+    new Endpoint({ type: "taxonomies", path: "wp/v2/taxonomies" }, config).getRouter(router)
   );
   app.use(
     "/lsp-api/settings",
-    endpoint({ type: "settings", path: "lsp-api/v1/settings" })(config)
+    new Endpoint({ type: "settings", path: "lsp-api/v1/settings" }, config).getRouter(router)
   );
   app.use(
     "/lsp-api",
-    endpoint({ type: "root", path: "/", chainAllOptions: false })(config)
+    new Endpoint({ type: "root", path: "/", chainAllOptions: false }, config).getRouter(router)
   );
 
   app.use((req, res, next) => {
@@ -112,7 +122,7 @@ export default config => {
   if (process.env.NODE_ENV === "development") {
     app.use((err, req, res) => {
       res.status(err.status || 500).send(err);
-      throw new Error(err)
+      throw new Error(err);
     });
   }
 
@@ -123,9 +133,7 @@ export default config => {
   app.listen(config.port, config.api, () => {
     if (devMode)
       console.log(
-        chalk`{bold.red API} is listening on port {cyan.underline ${
-          config.port
-        }}`
+        chalk`{bold.red API} is listening on port {cyan.underline ${config.port}}`
       );
   });
 };

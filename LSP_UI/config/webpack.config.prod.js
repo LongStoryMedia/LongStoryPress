@@ -1,5 +1,5 @@
 const webpack = require("webpack");
-const createConfig = require("./createConfig");
+const createConfig = require("./createConfig").default;
 const fs = require("fs-extra");
 const path = require("path");
 const paths = require("./paths");

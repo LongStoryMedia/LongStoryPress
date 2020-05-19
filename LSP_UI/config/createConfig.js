@@ -28,7 +28,7 @@ const babelLoader = {
   }
 };
 
-module.exports = (name, customPlugins, shouldWatch, cb) => {
+module.exports = (name, customPlugins, shouldWatch) => {
   let nodeFields,
     outputPath,
     loaderRules,
@@ -244,5 +244,4 @@ module.exports = (name, customPlugins, shouldWatch, cb) => {
     server = {};
   if (name === "client") client = { optimization: customOptimization };
   return { ...common, ...client, ...server };
-  cb && cb();
 };

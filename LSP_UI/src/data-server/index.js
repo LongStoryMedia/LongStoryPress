@@ -11,5 +11,5 @@ export default server({
   api: LSP_HOST,
   port: LSP_DATA_PORT,
   stripe: STRIPE_SK,
-  url: `${LSP_ADMIN}`
+  url: LSP_ADMIN
 });

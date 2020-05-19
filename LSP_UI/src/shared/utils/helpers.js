@@ -1,5 +1,8 @@
 import React, { PureComponent } from "react";
 
+export const objectIsEmpty = obj =>
+  !!(Object.entries(obj).length === 0 && obj.constructor === Object);
+
 export const filterManifest = (manifest, test, tag) => {
   const isJS = "script" === tag;
   const onlySrc = !tag;
