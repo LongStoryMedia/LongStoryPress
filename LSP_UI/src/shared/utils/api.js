@@ -1,6 +1,4 @@
-import Cookies from "universal-cookie";
 import fetch from "isomorphic-fetch";
-const cookies = new Cookies();
 
 const apiRoot = process.env.NODE_ENV !== "production"
   ? `http://localhost:${process.env.LSP_DATA_PORT}/lsp-api`
@@ -17,7 +15,7 @@ export const invokeApi = async ({
   const slash = "/" === path[0] ? "" : "/";
   body = body ? JSON.stringify(body) : body;
   headers = new Headers({ ...headers });
-  auth() && headers.append("Authorization", auth().token);
+  // auth() && headers.append("Authorization", auth().token);
   headers.append("Content-Type", "application/json");
   try {
     const res = await fetch(apiRoot + slash + path + query, {
@@ -39,35 +37,35 @@ export const invokeApi = async ({
   }
 };
 
-export const auth = () => {
-  const token = cookies.get("lsp_token"),
-    username = cookies.get("lsp_user");
-  return token ? { token, username } : false;
-};
+// export const auth = () => {
+//   const token = cookies.get("lsp_token"),
+//     username = cookies.get("lsp_user");
+//   return token && { token, username };
+// };
 
-export const login = async ({ username, password }) => {
-  const doLogin = await invokeApi({
-    path: "login",
-    method: "POST",
-    body: {
-      username: username,
-      password: password
-    }
-  });
-  if (doLogin && doLogin.token) {
-    cookies.set("lsp_token", doLogin.token, { maxAge: 36000, path: "/" });
-    cookies.set("lsp_user", doLogin.user.username, {
-      maxAge: 36000,
-      path: "/"
-    });
-  } else throw new Error("authentication failed");
-  return doLogin;
-};
+// export const login = async ({ username, password }) => {
+//   const doLogin = await invokeApi({
+//     path: "login",
+//     method: "POST",
+//     body: {
+//       username: username,
+//       password: password
+//     }
+//   });
+//   if (doLogin && doLogin.token) {
+//     cookies.set("lsp_token", doLogin.token, { maxAge: 36000, path: "/" });
+//     cookies.set("lsp_user", doLogin.user.username, {
+//       maxAge: 36000,
+//       path: "/"
+//     });
+//   } else throw new Error("authentication failed");
+//   return doLogin;
+// };
 
-export const logout = async () => {
-  cookies.remove("lsp_token");
-  cookies.remove("lsp_user");
-};
+// export const logout = async () => {
+//   cookies.remove("lsp_token");
+//   cookies.remove("lsp_user");
+// };
 
 export const findLocalItems = query => {
   let i,

@@ -158,6 +158,9 @@ export default ({
           body: { password, username },
           method: "POST"
         });
+        res.cookie("lsp_token", `Bearer ${data.token}`, {
+
+        })
         res.json(data);
       }
     });

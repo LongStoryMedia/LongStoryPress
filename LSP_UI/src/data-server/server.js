@@ -4,6 +4,7 @@ import helmet from "helmet";
 import bodyParser from "body-parser";
 import cors from "cors";
 import timeout from "connect-timeout";
+import cookieSession from "cookie-session";
 import express from "express";
 import path from "path";
 import chalk from "chalk";
@@ -23,6 +24,10 @@ export default config => {
   app.use(helmet());
   app.use(compression());
   app.use(timeout(10000));
+  app.use(cookieSession({
+    name: 'session',
+    keys: ['key1', 'key2']
+  }))
 
   const haltOnTimedout = (req, res, next) => {
     if (!req.timedout) next();
