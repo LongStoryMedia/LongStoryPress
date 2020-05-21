@@ -8,15 +8,15 @@ import styles from "./account.scss";
 export default class Login extends PureComponent {
   state = {
     email: "",
-    password: "",
+    password: ""
   };
 
-  handleInput = (e) =>
+  handleInput = e =>
     this.setState({
-      [e.currentTarget.id]: e.currentTarget.value,
+      [e.currentTarget.id]: e.currentTarget.value
     });
 
-  handleSubmit = async (e) => {
+  handleSubmit = async e => {
     e.preventDefault();
     const { email, password } = this.state;
     const { search } = this.props.location;
@@ -26,10 +26,14 @@ export default class Login extends PureComponent {
         method: "POST",
         body: {
           username: email,
-          password,
+          password
         },
+        options: {
+          mode: "same-origin",
+          redirect: "follow",
+          credentials: "include"
+        }
       });
-      console.log(login);
     } catch (e) {
       alert(e);
     }

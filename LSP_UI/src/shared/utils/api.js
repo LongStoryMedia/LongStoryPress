@@ -1,28 +1,38 @@
 import fetch from "isomorphic-fetch";
 
-const apiRoot = process.env.NODE_ENV !== "production"
-  ? `http://localhost:${process.env.LSP_DATA_PORT}/lsp-api`
-  : `${process.env.LSP_URL_PROTOCOL}/lsp-api`
+const apiRoot =
+  process.env.NODE_ENV !== "production"
+    ? `http://localhost:${process.env.LSP_DEV_PORT}/lsp-api`
+    : `${process.env.LSP_URL_PROTOCOL}/lsp-api`;
 
 export const invokeApi = async ({
   path,
   method = "GET",
   headers = {},
+  options = {},
   query = "",
   body,
+  noReturn = false,
   props
 }) => {
   const slash = "/" === path[0] ? "" : "/";
   body = body ? JSON.stringify(body) : body;
-  headers = new Headers({ ...headers });
+  headers = new Headers({
+    ...headers,
+    "Content-Type": "application/json"
+  });
+  const requestOptions = {
+    method,
+    headers,
+    body,
+    ...options
+  };
   // auth() && headers.append("Authorization", auth().token);
-  headers.append("Content-Type", "application/json");
   try {
-    const res = await fetch(apiRoot + slash + path + query, {
-      method,
-      headers,
-      body
-    });
+    const res = await fetch(
+      apiRoot + slash + path + query,
+      requestOptions
+    );
     if (200 !== res.status) {
       if (401 === res.status && props) {
         return props.history.push(
@@ -31,7 +41,7 @@ export const invokeApi = async ({
       }
       throw new Error(await res.text());
     }
-    return await res.json();
+    return noReturn ? "" : await res.json();
   } catch (e) {
     throw new Error(e);
   }
