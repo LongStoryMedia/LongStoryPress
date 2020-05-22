@@ -3,6 +3,7 @@ import { hydrate } from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 // import serviceWorker from "./serviceWorker";
 import App from "../shared/App";
+require("regenerator-runtime");
 
 hydrate(
   <BrowserRouter>

@@ -28,7 +28,7 @@ const babelLoader = {
   }
 };
 
-module.exports = (name, customPlugins, shouldWatch, cb) => {
+module.exports = (name, customPlugins, shouldWatch) => {
   let nodeFields,
     outputPath,
     loaderRules,
@@ -225,10 +225,7 @@ module.exports = (name, customPlugins, shouldWatch, cb) => {
         LSP: path.resolve(paths.appRoot, "src/shared")
       }
     },
-    entry: [
-      require.resolve("babel-polyfill"),
-      path.resolve(paths.appSrc, `${name}/index.js`)
-    ],
+    entry: path.resolve(paths.appSrc, `${name}/index.js`),
     output: {
       path: outputPath,
       filename: devMode ? `${name}.[name].js` : `${name}.[hash].[name].js`,
@@ -244,5 +241,4 @@ module.exports = (name, customPlugins, shouldWatch, cb) => {
     server = {};
   if (name === "client") client = { optimization: customOptimization };
   return { ...common, ...client, ...server };
-  cb && cb();
 };

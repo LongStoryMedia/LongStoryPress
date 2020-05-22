@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { withRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { invokeApi } from "LSP/utils/api";
+import invokeApi from "LSP/utils/invokeApi";
 import { throttle } from "LSP/utils/helpers";
 import _$ from "long-story-library";
 import styles from "./app.scss";

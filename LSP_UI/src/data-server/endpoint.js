@@ -1,6 +1,8 @@
 import express from "express";
 import fetch from "isomorphic-fetch";
 
+const devMode = process.env.NODE_ENV === "development";
+
 export default ({
   type,
   path,
@@ -29,7 +31,7 @@ export default ({
       arr.map(
         a =>
           typeof a === "object" && !Array.isArray(a)
-            ? wpObj(a)
+            ? responseObject(a)
             : Array.isArray(a)
               ? handleArray(a)
               : a
@@ -45,7 +47,7 @@ export default ({
     } else return item ? item : ifNot;
   };
 
-  const wpObj = item => ({
+  const responseObject = item => ({
     ...config.wpFields,
     id: sendIf({ item: item.id, ifNot: sendIf({ item: item.ID }) }),
     slug: sendIf({ item: item.slug }),
@@ -85,10 +87,10 @@ export default ({
     children: sendIf({ item: item.children })
   });
 
-  const resJSON = async (req, res, next, data) => {
+  const createResponse = async (req, res, next, data) => {
     const responseObj = Array.isArray(data)
-      ? data.map(item => wpObj(item))
-      : wpObj(data);
+      ? data.map(item => responseObject(item))
+      : responseObject(data);
     let response =
       Array.isArray(responseObj) && req.params.id
         ? responseObj.length > 1
@@ -110,7 +112,7 @@ export default ({
     });
   };
 
-  const tryCatch = async (
+  const createRequest = async (
     req,
     res,
     next,
@@ -146,22 +148,33 @@ export default ({
   router
     .route("/")
     .get(async (req, res, next) => {
-      const data = await tryCatch(req, res, next, { path });
-      return resJSON(req, res, next, data);
+      const data = await createRequest(req, res, next, { path });
+      return createResponse(req, res, next, data);
     })
     .post(async (req, res, next) => {
       if (type === "login") {
-        console.log(req.body);
         const { password, username } = req.body;
-        const data = await tryCatch(req, res, next, {
+        const data = await createRequest(req, res, next, {
           path,
           body: { password, username },
           method: "POST"
         });
-        res.cookie("lsp_token", `Bearer ${data.token}`, {
-
-        })
-        res.json(data);
+        res
+          .cookie(
+            "lsp_header_payload",
+            data.token.slice(0, data.token.lastIndexOf(".")),
+            {
+              secure: devMode ? false : true,
+              sameSite: "strict",
+              httpOnly: false
+            }
+          )
+          .cookie("lsp_signature", data.token.split(".").pop(), {
+            secure: devMode ? false : true,
+            sameSite: "strict",
+            httpOnly: true
+          })
+          .end();
       }
     });
 
@@ -171,22 +184,22 @@ export default ({
       : `${path}/${req.params.id}`;
 
     if (type === "users" || req.params.id === "me")
-      res.json(await tryCatch(req, res, next, { path: "/wp/v2/users/me" }));
+      res.json(await createRequest(req, res, next, { path: "/wp/v2/users/me" }));
 
-    const data = await tryCatch(req, res, next, { path: pathname });
-    return resJSON(req, res, next, data);
+    const data = await createRequest(req, res, next, { path: pathname });
+    return createResponse(req, res, next, data);
   });
 
   router.route("/parent/:id").get(async (req, res, next) => {
-    const parents = await tryCatch(req, res, next, { path, body });
+    const parents = await createRequest(req, res, next, { path, body });
     const parentId = parents.filter(parent => parent.slug === req.params.id);
     if (!parentId || !parentId[0]) res.send().status(404);
     else {
-      const data = await tryCatch(req, res, next, {
+      const data = await createRequest(req, res, next, {
         path: `${path}?parent=${parentId[0].id}`,
         body
       });
-      return resJSON(req, res, next, data);
+      return createResponse(req, res, next, data);
     }
   });
   return router;

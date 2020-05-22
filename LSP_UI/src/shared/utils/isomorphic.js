@@ -6,8 +6,8 @@ export const deref = (obj, arr) => {
   return obj;
 };
 
-export default (WC, { param, windowData = false }) => {
-  return class extends PureComponent {
+const isomorphic = (WC, { param, windowData = false }) => {
+  return class IsomorphicComponent extends PureComponent {
     constructor(props) {
       super(props);
       let data;
@@ -70,3 +70,4 @@ export default (WC, { param, windowData = false }) => {
     }
   };
 };
+export default isomorphic;

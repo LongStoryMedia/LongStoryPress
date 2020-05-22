@@ -5,7 +5,6 @@ import React from "react";
 import chalk from "chalk";
 import { renderToNodeStream } from "react-dom/server";
 import { StaticRouter, matchPath } from "react-router-dom";
-import serialize from "serialize-javascript";
 import compression from "compression";
 import { preloadAll } from "react-loadable";
 import fetch from "isomorphic-fetch";
@@ -15,6 +14,8 @@ import App from "../shared/App";
 import routes from "Site/routes";
 import paths from "../../config/paths";
 import { removeMarkup, filterManifest } from "../shared/utils/helpers";
+
+require("regenerator-runtime");
 
 const app = express();
 const publicDir =
@@ -162,7 +163,7 @@ app.get("*", async (req, res) => {
       </head>
       <body class="background_backdrop color_text_color">
       <div id="app">${html}</div>
-      <script>window.__INITIAL_DATA__=${serialize(data)}</script>
+      <script>window.__INITIAL_DATA__=${JSON.stringify(data)}</script>
       ${bundles}
       ${main}
       <script>

@@ -1,5 +1,7 @@
 import server from "./server";
 
+require("regenerator-runtime");
+
 const {
   LSP_HOST,
   LSP_DATA_PORT,

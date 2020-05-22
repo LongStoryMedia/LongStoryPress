@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
-import { invokeApi } from "LSP/utils/api";
+import invokeApi from "LSP/utils/invokeApi";
 import { Email, Password } from "LSP/Components/FormFields";
 import LoaderButton from "LSP/Components/LoaderButton";
 import styles from "./account.scss";
