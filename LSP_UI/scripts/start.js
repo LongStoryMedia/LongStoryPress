@@ -94,6 +94,9 @@ const options = {
   historyApiFallback: true,
   open: true,
   proxy: {
+    "/lsp-api": {
+      target: `http://localhost:${process.env.LSP_DATA_PORT}`
+    },
     "/": {
       target: `http://localhost:${process.env.LSP_RENDER_PORT}`
     }
