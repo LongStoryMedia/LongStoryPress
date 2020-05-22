@@ -1,7 +1,7 @@
 import fetch from "isomorphic-fetch";
 
 const apiRoot = process.env.NODE_ENV !== "production"
-  ? `http://localhost:${process.env.LSP_DATA_PORT}/lsp-api`
+  ? `http://localhost:${process.env.LSP_DEV_PORT}/lsp-api`
   : `${process.env.LSP_URL_PROTOCOL}/lsp-api`
 
 export const invokeApi = async ({
