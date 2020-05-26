@@ -21,7 +21,7 @@ export default class Login extends PureComponent {
     const { email, password } = this.state;
     const { search } = this.props.location;
     try {
-      const login = await invokeApi({
+      await invokeApi({
         path: "login",
         method: "POST",
         body: {
@@ -32,13 +32,15 @@ export default class Login extends PureComponent {
           mode: "same-origin",
           redirect: "follow",
           credentials: "include"
-        }
+        },
+        noReturn: true
       });
     } catch (e) {
-      alert(e);
+      throw e;
     }
-    search.match(/\?redirect=/) &&
+    if(search.match(/\?redirect=/)){
       this.props.history.push(search.slice(search.indexOf("=") + 1));
+    }
   };
 
   render() {

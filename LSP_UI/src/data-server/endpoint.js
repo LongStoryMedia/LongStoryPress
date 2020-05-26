@@ -28,13 +28,12 @@ export default ({
 
   const sendIf = ({ item, prop, ifNot = void 0 }) => {
     const handleArray = arr =>
-      arr.map(
-        a =>
-          typeof a === "object" && !Array.isArray(a)
-            ? responseObject(a)
-            : Array.isArray(a)
-              ? handleArray(a)
-              : a
+      arr.map(a =>
+        typeof a === "object" && !Array.isArray(a)
+          ? responseObject(a)
+          : Array.isArray(a)
+          ? handleArray(a)
+          : a
       );
     if (typeof item === "object" && prop && !Array.isArray(item)) {
       return item[prop]
@@ -96,8 +95,8 @@ export default ({
         ? responseObj.length > 1
           ? responseObj
           : responseObj[0]
-            ? responseObj[0]
-            : responseObj
+          ? responseObj[0]
+          : responseObj
         : responseObj;
     if (pwRequired && !req.headers.authorization)
       res.json({ error: "Please login to access your content", status: 401 });
@@ -145,6 +144,7 @@ export default ({
       return next(e);
     }
   };
+  
   router
     .route("/")
     .get(async (req, res, next) => {
@@ -166,7 +166,8 @@ export default ({
             {
               secure: devMode ? false : true,
               sameSite: "strict",
-              httpOnly: false
+              httpOnly: false,
+              expires: new Date(Date.now() + 900000)
             }
           )
           .cookie("lsp_signature", data.token.split(".").pop(), {
@@ -184,7 +185,9 @@ export default ({
       : `${path}/${req.params.id}`;
 
     if (type === "users" || req.params.id === "me")
-      res.json(await createRequest(req, res, next, { path: "/wp/v2/users/me" }));
+      res.json(
+        await createRequest(req, res, next, { path: "/wp/v2/users/me" })
+      );
 
     const data = await createRequest(req, res, next, { path: pathname });
     return createResponse(req, res, next, data);

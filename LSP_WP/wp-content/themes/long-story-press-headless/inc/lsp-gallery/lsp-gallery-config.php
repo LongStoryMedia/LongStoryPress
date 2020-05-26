@@ -224,6 +224,15 @@ function lsp_gallery_meta_box_config() {
         'std' => 'div',
         'value' => '',
       ],
+      [
+        'id' => 'style',
+        'name' => esc_html__('Gallery Styles', 'lsp'),
+        'type' => 'text',
+        'description' => esc_html__('Style for the gallery.', 'lsp'),
+        'placeholder' => '=',
+        'std' => '',
+        'value' => '',
+      ],
     ],
   ]);
 }

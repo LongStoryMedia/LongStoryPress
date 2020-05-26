@@ -31,7 +31,22 @@ export default config => {
   app.use((req, res, next) => {
     if (!req.timedout) next();
   });
-  
+
+  app.use((req, res, next) => {
+    const { lsp_header_payload, lsp_signature } = req.cookies;
+    const token = [lsp_header_payload, lsp_signature].join(".");
+    if (lsp_header_payload && lsp_signature) {
+      res.cookie("lsp_header_payload", lsp_header_payload, {
+        secure: devMode ? false : true,
+        sameSite: "strict",
+        httpOnly: false,
+        expires: new Date(Date.now() + 900000)
+      });
+      req.headers["Authorization"] = `Bearer ${token}`;
+    }
+    next();
+  });
+
   app.use(
     "/lsp-api/login",
     endpoint({ type: "login", path: "jwt-auth/v1/token" })(config)

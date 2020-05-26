@@ -1,5 +1,15 @@
 import React, { PureComponent } from "react";
 
+export const styleStringToObject = (styleString) => {
+  const styleObject = {};
+  const keys = styleString.split(/[:;]/).filter((key, i) => i % 2 === 0 && !!key);
+  const values = styleString.split(/[:;]/).filter((value, i) => i % 2 === 1 && !!value);
+  for (let i = 0; i < keys.length; i++) {
+    styleObject[keys[i].trim()] = values[i].trim();
+  }
+  return styleObject;
+}
+
 export const filterManifest = (manifest, test, tag) => {
   const isJS = "script" === tag;
   const onlySrc = !tag;

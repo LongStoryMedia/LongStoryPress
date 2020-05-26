@@ -5,6 +5,7 @@ const apiRoot =
   process.env.NODE_ENV !== "production"
     ? `http://localhost:${process.env.LSP_DEV_PORT}/lsp-api`
     : `${process.env.LSP_URL_PROTOCOL}/lsp-api`;
+
 const invokeApi = async ({
   path,
   method = "GET",
@@ -29,10 +30,7 @@ const invokeApi = async ({
   };
   // auth() && headers.append("Authorization", auth().token);
   try {
-    const res = await fetch(
-      apiRoot + slash + path + query,
-      requestOptions
-    );
+    const res = await fetch(apiRoot + slash + path + query, requestOptions);
     if (200 !== res.status) {
       if (401 === res.status && props) {
         return props.history.push(

@@ -1,5 +1,5 @@
 import React from "react";
-import { renderMarkup } from "LSP/utils/helpers";
+import { renderMarkup, styleStringToObject } from "LSP/utils/helpers";
 import _$ from "long-story-library";
 import Gallery from "react-gallery-designer";
 
@@ -63,7 +63,7 @@ export const getGalleryData = (galleries, lsp_galleries, props) =>
       inContent: shortcode["in-content"],
       imgWidth: shortcode["img-width"],
       imgHeight: shortcode["img-height"],
-      style: shortcode.style,
+      style: styleStringToObject(gallery.gallery_data.style),
       settings: gallery_data,
       images: gallery_images.map((img) => {
         const { sizes, image_meta } = img.media_details;
