@@ -13,13 +13,13 @@ export function injectGallery(content, galleryData, styles, props) {
       const shortcode = JSON.parse(html.replace("lsp_gallery:", ""));
       const position = shortcode["in-content"]
         ? {
-            position: "relative",
+            position: "relative"
           }
         : {
             position: "absolute",
             top: galleryData[idx].position === "top" ? 0 : "",
             bottom: galleryData[idx].position === "bottom" ? 0 : "",
-            left: 0,
+            left: 0
           };
       return (
         <Gallery
@@ -31,12 +31,12 @@ export function injectGallery(content, galleryData, styles, props) {
           id={`${galleryData[idx].slug}-gallery-${idx}`}
           style={{
             ...position,
-            ...galleryData[idx].style,
+            ...galleryData[idx].style
           }}
           imgStyle={{
             ...galleryData[idx].imgStyle,
             width: galleryData[idx].imgWidth || "100%",
-            height: galleryData[idx].imgHeight || "",
+            height: galleryData[idx].imgHeight || ""
           }}
           contain={galleryData[idx].contain}
           suppressHydrationWarning={true}
@@ -51,7 +51,8 @@ export const getGalleryData = (galleries, lsp_galleries, props) =>
     const shortcode = JSON.parse(s.match(/({.+?})-->/)[1]);
     const gallery = lsp_galleries[i];
     const { gallery_data, gallery_images } = gallery;
-    const width = _$(shortcode).OBJ(["style", "width"]);
+    const galleryStyle = styleStringToObject(_$(gallery_data).OBJ(["style"], ""));
+    const width = _$(galleryStyle).OBJ(["width"]);
     const containerWidth = width
       ? /px/gi.test(width)
         ? Number(width)
@@ -63,9 +64,9 @@ export const getGalleryData = (galleries, lsp_galleries, props) =>
       inContent: shortcode["in-content"],
       imgWidth: shortcode["img-width"],
       imgHeight: shortcode["img-height"],
-      style: styleStringToObject(gallery.gallery_data.style),
+      style: galleryStyle,
       settings: gallery_data,
-      images: gallery_images.map((img) => {
+      images: gallery_images.map(img => {
         const { sizes, image_meta } = img.media_details;
         return {
           name: img.name,
@@ -105,11 +106,11 @@ export const getGalleryData = (galleries, lsp_galleries, props) =>
           target: img.target,
           title: image_meta.title,
           credit: image_meta.credit,
-          keywords: image_meta.keywords,
+          keywords: image_meta.keywords
         };
-      }),
+      })
     };
   });
 
-export const getGalleryCommentJson = (content) =>
+export const getGalleryCommentJson = content =>
   content.match(/<!--lsp_gallery:(.+?)-->/gi);

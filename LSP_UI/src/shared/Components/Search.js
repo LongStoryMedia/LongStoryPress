@@ -42,10 +42,6 @@ export default class Search extends PureComponent {
           icon={faSearch}
           onClick={this.expandSearchBox}
           className={iconClass}
-          style={{
-            maxHeight:"20px",
-            maxWidth:"20px"
-          }}
         />
         <input
           ref={this.searchQuery}

@@ -8,16 +8,16 @@ function lsp_gallery_post_type()
 {
 
     $labels = [
-        'name' => _x('Gallerys', 'Gallerys name', 'lsp'),
+        'name' => _x('Galleries', 'Galleries name', 'lsp'),
         'singular_name' => _x('Gallery', 'Gallery name', 'lsp'),
-        'menu_name' => _x('Gallerys', 'admin menu', 'lsp'),
+        'menu_name' => _x('Galleries', 'admin menu', 'lsp'),
         'add_new' => _x('Add Gallery', 'Gallery', 'lsp'),
-        'all_items' => __('Gallerys', 'lsp'),
+        'all_items' => __('Galleries', 'lsp'),
         'add_new_item' => __('Add Gallery', 'lsp'),
         'edit_item' => __('Edit Gallery', 'lsp'),
         'new_item' => __('New Gallery', 'lsp'),
         'view_item' => __('View Gallery', 'lsp'),
-        'search_items' => __('Search Gallerys', 'lsp'),
+        'search_items' => __('Search Galleries', 'lsp'),
         'not_found' => __('Gallery Not Found', 'lsp'),
         'not_found_in_trash' => __('No galleries found in trash', 'lsp'),
       ];

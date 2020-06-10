@@ -6,9 +6,10 @@ import { renderMarkup } from "../utils/helpers";
 export default ({
   className,
   title,
+  titleClass,
+  imgClass,
+  contentClass,
   titleStyles,
-  imgStyles,
-  contentStyles,
   content,
   preview,
   featuredMedia,
@@ -17,7 +18,7 @@ export default ({
   style,
   contain,
   srcset,
-  children
+  children,
 }) => (
   <div
     className={[styles.contentBox, className, "background_background_one"].join(
@@ -28,7 +29,7 @@ export default ({
     {featuredMedia ? (
       <ImageDesigner
         contain={contain}
-        className={[styles.title, imgStyles].join(" ")}
+        className={[styles.title, imgClass].join(" ")}
         height={height || "10em"}
         src={featuredMedia}
         placeHolder={placeHolder ? placeHolder : featuredMedia}
@@ -37,17 +38,24 @@ export default ({
         lazy={true}
       >
         {title && (
-          <span className={[styles.title, titleStyles].join(" ")}>{title}</span>
-        )}{children}
+          <span style={titleStyles} className={[styles.title, titleClass].join(" ")}>
+            {renderMarkup({ markup: title })}
+          </span>
+        )}
+        {children}
       </ImageDesigner>
     ) : (
       <div className={styles.title} style={{ opacity: 1 }}>
-        <span className={titleStyles}>{title}</span>
+        <span className={titleClass}>{renderMarkup({ markup: title })}</span>
       </div>
     )}
     {content && (
-      <div className={[styles.content, contentStyles].join(" ")}>
-        {renderMarkup({ markup: preview ? preview : `${content.split(" ").slice(0, 30).join(" ").trim()}...` })}
+      <div className={[styles.content, contentClass].join(" ")}>
+        {renderMarkup({
+          markup: preview
+            ? preview
+            : `${content.split(" ").slice(0, 30).join(" ").trim()}...`,
+        })}
       </div>
     )}
   </div>

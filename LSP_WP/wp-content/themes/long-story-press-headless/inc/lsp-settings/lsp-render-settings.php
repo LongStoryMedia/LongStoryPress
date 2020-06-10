@@ -2,91 +2,91 @@
 
 class LSP_Render_Settings
 {
-    /**
-     * Menu slug.
-     *
-     * @var string
-     */
-    protected $slug = 'lsp-settings';
-    /**
-     * URL for assets.
-     *
-     * @var string
-     */
-    protected $assets_url;
+  /**
+   * Menu slug.
+   *
+   * @var string
+   */
+  protected $slug = 'lsp-settings';
+  /**
+   * URL for assets.
+   *
+   * @var string
+   */
+  protected $assets_url;
 
-    /**
-     * LSP_Content_Areas constructor.
-     *
-     * @param string $assets_url URL for assets
-     */
-    public function __construct($assets_url)
-    {
-        $this->assets_url = $assets_url;
-        add_action('admin_menu', [$this, 'add_page']);
-        add_action('admin_enqueue_scripts', [$this, 'register_assets']);
+  /**
+   * LSP_Content_Areas constructor.
+   *
+   * @param string $assets_url URL for assets
+   */
+  public function __construct($assets_url)
+  {
+    $this->assets_url = $assets_url;
+    add_action('admin_menu', [$this, 'add_page']);
+    add_action('admin_enqueue_scripts', [$this, 'register_assets']);
+  }
+
+  /**
+   * Add CF Popup submenu page.
+   *
+   * @since 0.0.3
+   *
+   * @uses "admin_menu"
+   */
+  public function add_page()
+  {
+    add_menu_page(
+      __('Site Settings', 'lsp'),
+      __('Site Settings', 'lsp'),
+      'manage_options',
+      $this->slug,
+      [$this, 'render_admin'],
+      'dashicons-layout',
+      2
+    );
+  }
+
+  /**
+   * Register CSS and JS for page.
+   *
+   * @uses "admin_enqueue_scripts" action
+   */
+  public function register_assets()
+  {
+    wp_register_script($this->slug, $this->assets_url . '/settings.js', ['jquery']);
+    wp_register_style($this->slug, $this->assets_url . '/settings.css');
+    wp_localize_script($this->slug, 'LSP', [
+      'strings' => [
+        'saved' => __('Settings Saved', 'lsp'),
+        'error' => __('Error', 'lsp'),
+      ],
+      'api' => [
+        'settings' => esc_url_raw(site_url('wp-json/lsp-api/v1/settings', 'https')),
+        'nonce' => wp_create_nonce('wp_rest'),
+        'defaults' => LSP_Edit_Settings::$defaults,
+      ],
+    ]);
+  }
+
+  /**
+   * Enqueue CSS and JS for page.
+   */
+  public function enqueue_assets()
+  {
+    if (!wp_script_is($this->slug, 'registered')) {
+      $this->register_assets();
     }
+    wp_enqueue_script($this->slug);
+    wp_enqueue_style($this->slug);
+  }
 
-    /**
-     * Add CF Popup submenu page.
-     *
-     * @since 0.0.3
-     *
-     * @uses "admin_menu"
-     */
-    public function add_page()
-    {
-        add_menu_page(
-            __('Site Settings', 'lsp'),
-            __('Site Settings', 'lsp'),
-            'manage_options',
-            $this->slug,
-            [$this, 'render_admin'],
-            'dashicons-layout',
-            2
-        );
-    }
-
-    /**
-     * Register CSS and JS for page.
-     *
-     * @uses "admin_enqueue_scripts" action
-     */
-    public function register_assets()
-    {
-        wp_register_script($this->slug, $this->assets_url.'/settings.js', ['jquery']);
-        wp_register_style($this->slug, $this->assets_url.'/settings.css');
-        wp_localize_script($this->slug, 'LSP', [
-            'strings' => [
-                'saved' => __('Settings Saved', 'lsp'),
-                'error' => __('Error', 'lsp'),
-            ],
-            'api' => [
-                'settings' => esc_url_raw(site_url('wp-json/lsp-api/v1/settings', 'https')),
-                'nonce' => wp_create_nonce('wp_rest'),
-                'defaults' => LSP_Edit_Settings::$defaults,
-            ],
-        ]);
-    }
-
-    /**
-     * Enqueue CSS and JS for page.
-     */
-    public function enqueue_assets()
-    {
-        if (!wp_script_is($this->slug, 'registered')) {
-            $this->register_assets();
-        }
-        wp_enqueue_script($this->slug);
-        wp_enqueue_style($this->slug);
-    }
-
-    /**
-     * Render plugin admin page.
-     */
-    public function render_admin()
-    {
-        $this->enqueue_assets(); ?>
+  /**
+   * Render plugin admin page.
+   */
+  public function render_admin()
+  {
+    add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']); ?>
     <form id="lsp-form" autocomplete="on">
       <div id="feedback">
       </div>
@@ -170,7 +170,7 @@ class LSP_Render_Settings
           <label for="primary_color">
             <?php esc_html_e('Primary Color', 'lsp'); ?>
           </label>
-          <input id="primary_color" type="color"/>
+          <input id="primary_color" type="color" />
           <input type="text" id="primary_color_text" onchange="__LSP_SETTINGS__.onChange()" />
         </div>
         <div class="text-input">
@@ -191,7 +191,7 @@ class LSP_Render_Settings
           <label for="background_one">
             <?php esc_html_e('Background 1', 'lsp'); ?>
           </label>
-          <input id="background_one" type="color"/>
+          <input id="background_one" type="color" />
           <input type="text" id="background_one_text" onchange="__LSP_SETTINGS__.onChange()" />
         </div>
         <div class="text-input">
@@ -240,6 +240,6 @@ class LSP_Render_Settings
       </section>
       <?php submit_button(__('Save', 'lsp')); ?>
     </form>
-    <?php
-    }
+<?php
+  }
 }

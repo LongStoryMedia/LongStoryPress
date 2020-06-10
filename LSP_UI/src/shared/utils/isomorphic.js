@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import _$ from "long-story-library";
 
 export const deref = (obj, arr) => {
   let i = 0;
@@ -26,7 +27,8 @@ const isomorphic = (WC, { param, windowData = false }) => {
     }
     componentDidMount() {
       const { data } = this.state;
-      !data && this.setDataInternal();
+      this.setState({ loading: true });
+      !data ? this.setDataInternal() : this.setState({ loading: false });;
     }
     componentDidUpdate(prevProps) {
       const { location } = this.props;
@@ -41,7 +43,6 @@ const isomorphic = (WC, { param, windowData = false }) => {
       const { fetchInitialData, setData } = this.props;
       const data = await fetchInitialData(deref(this.props, param));
       setData(data);
-      this.setState({ loading: true });
       try {
         this.setState({ data });
       } catch (e) {

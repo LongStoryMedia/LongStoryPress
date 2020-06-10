@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React from "react";
 
 export const styleStringToObject = (styleString) => {
   const styleObject = {};
@@ -43,24 +43,6 @@ export const renderMarkup = ({
 
 export const removeMarkup = (markup) =>
   /<.*?\/?>/gi.test(markup) ? markup.replace(/<.*?\/?>/gi, "").trim() : markup;
-
-export class CorD extends PureComponent {
-  state = {};
-  async componentDidMount() {
-    let C;
-    try {
-      C = await import(`Site/${this.props.pathToCustomFile}`);
-    } catch (e) {
-      C = await import(`LSP/${this.props.pathToDefaultFile}`);
-    } finally {
-      this.setState({ C: C.default });
-    }
-  }
-  render() {
-    const { C } = this.state;
-    return C ? <C {...this.props} /> : null;
-  }
-}
 
 export function throttle(func, interval) {
   var timeout;

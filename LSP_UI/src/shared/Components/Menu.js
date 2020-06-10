@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import isomorphic from "./utils/isomorphic";
+import isomorphic from "LSP/utils/isomorphic";
 import _$ from "long-story-library";
 
 export default isomorphic(

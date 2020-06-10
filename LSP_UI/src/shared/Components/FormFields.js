@@ -61,6 +61,30 @@ const RadioQuestion = (props) => (
   </div>
 );
 
+const SelectBox = ({ label, id, name, title, options, handleChange }) => (
+  <div className={styles.question}>
+    <label className={styles.spanTwo}>{label}</label>
+    <select
+      className={styles.textInput}
+      name={name}
+      title={title}
+      onClick={handleChange}
+      id={id}
+    >
+      {options.map((option, i) => (
+        <option
+          value={option}
+          key={[option, [name, id].join(".")].join("")}
+          id={[option, [name, id].join(".")].join("")}
+          name={name}
+        >
+          {option.title}
+        </option>
+      ))}
+    </select>
+  </div>
+);
+
 const CheckBox = (props) => (
   <div className={styles.question}>
     <input
@@ -189,6 +213,11 @@ const Password = (props) => (
 );
 
 export {
+  TextQuestion,
+  LongerTextQuestion,
+  RadioQuestion,
+  SelectBox,
+  CheckBox,
   Text,
   FirstName,
   LastName,
@@ -202,6 +231,5 @@ export {
   YesNo,
   Property,
   Occupation,
-  Sex,
-  CheckBox,
+  Sex
 };

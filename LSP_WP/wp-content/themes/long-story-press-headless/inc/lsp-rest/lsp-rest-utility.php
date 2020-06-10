@@ -8,20 +8,16 @@ function lsp_recursive_meta_search($search, $fields, $post_id)
             return $value;
         } elseif (is_array($post_meta)) {
             $dig = lsp_recursive_meta_search($search, $post_meta, $post_id);
-            if (is_null($dig)) {
-                continue;
-            } else {
+            if (!is_null($dig)) {
                 return $dig;
             }
-        } else {
-            continue;
         }
     }
 }
 
 function lsp_filter_NAN($val)
 {
-    return ((int) $val != "" && (int) $val != 0);
+    return ((string) $val != "" && (int) $val != 0);
 }
 
 function lsp_map_filter_values($cb, $arr, $filter = true)
@@ -121,7 +117,7 @@ function lsp_gallery_rest_cb($post)
                     wp_get_attachment_image_sizes((int) $img_id, 'medium_large'),
                     "1024px"
                 ])),
-                'sizes_sm'             => str_replace(" 100vw,", "", implode(",", [
+                'sizes_sm'          => str_replace(" 100vw,", "", implode(",", [
                     preg_replace('/300px$/', '150px', wp_get_attachment_image_sizes((int) $img_id, 'thumbnail')),
                     preg_replace('/768px$/', '300px', wp_get_attachment_image_sizes((int) $img_id)),
                     "768px"
@@ -202,4 +198,60 @@ function lsp_get_price_for_product($post)
         return get_post_meta($post_id, "_price", true);
     }
     return false;
+}
+
+function lsp_get_tags_for_product($post)
+{
+    $post_id = is_array($post) ? $post['id'] : $post->ID;
+    $terms = get_the_terms($post_id, 'product_tag');
+
+    $tags = array();
+    if (!empty($terms) && !is_wp_error($terms)) {
+        foreach ($terms as $term) {
+            $tags[] = $term->slug;
+        }
+    }
+    return $tags;
+}
+
+function lsp_get_tags_for_post($post)
+{
+    $post_id = is_array($post) ? $post['id'] : $post->ID;
+    $terms = get_the_terms($post_id, 'post_tag');
+
+    $tags = array();
+    if (!empty($terms) && !is_wp_error($terms)) {
+        foreach ($terms as $term) {
+            $tags[] = $term->slug;
+        }
+    }
+    return $tags;
+}
+
+function lsp_get_categories_for_product($post)
+{
+    $post_id = is_array($post) ? $post['id'] : $post->ID;
+    $terms = get_the_terms($post_id, 'product_cat');
+
+    $tags = array();
+    if (!empty($terms) && !is_wp_error($terms)) {
+        foreach ($terms as $term) {
+            $tags[] = $term->slug;
+        }
+    }
+    return $tags;
+}
+
+function lsp_get_categories_for_post($post)
+{
+    $post_id = is_array($post) ? $post['id'] : $post->ID;
+    $terms = get_the_category($post_id);
+
+    $tags = array();
+    if (!empty($terms) && !is_wp_error($terms)) {
+        foreach ($terms as $term) {
+            $tags[] = $term->slug;
+        }
+    }
+    return $tags;
 }

@@ -1,33 +1,28 @@
 import React, { PureComponent } from "react";
 import { withRouter } from "react-router-dom";
-import { HelmetProvider } from "react-helmet-async";
+import { HelmetProvider, Helmet } from "react-helmet-async";
 import invokeApi from "LSP/utils/invokeApi";
 import { throttle } from "LSP/utils/helpers";
 import _$ from "long-story-library";
-import styles from "./app.scss";
 import Router from "LSP/utils/Router";
 import E from "LSP/utils/E";
 import Header from "Site/Sections/Header";
 import Footer from "Site/Sections/Footer";
+import styles from "./app.scss";
 
 class App extends PureComponent {
-  state = {
-    authenticated: false,
-    settings: {
-      site: { tagline: "", title: "" },
-      contact: {},
-      colors: {},
-    },
-    data: {},
-  };
-  async componentDidMount() {
+  constructor(props) {
+    super(props);
+    const baseState = {
+      authenticated: false,
+      settings: {
+        site: { tagline: "", title: "" },
+        contact: {},
+        colors: {},
+      },
+      data: {},
+    };
     if (__isBrowser__) {
-      this.setState({
-        clientWidth: window.innerWidth,
-        clientHeight: window.innerHeight,
-        scrollTop: 0,
-      });
-      
       ((_$) => {
         _$.addListener(
           window,
@@ -46,7 +41,17 @@ class App extends PureComponent {
           true
         );
       })(new _$());
+      this.state = {
+        ...baseState,
+        clientWidth: window.innerWidth,
+        clientHeight: window.innerHeight,
+        scrollTop: 0,
+      };
+    } else {
+      this.state = baseState;
     }
+  }
+  async componentDidMount() {
     const settings = await invokeApi({ path: "/settings" });
     this.setState({
       settings: settings.body,
@@ -56,7 +61,7 @@ class App extends PureComponent {
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.handleWindowSize);
   }
-  handleScroll = e => {
+  handleScroll = (e) => {
     throttle(
       this.setState({
         scrollTop: e.currentTarget.scrollY,
@@ -96,6 +101,13 @@ class App extends PureComponent {
     };
     return (
       <HelmetProvider>
+        <Helmet>
+          <title>{_$(data).OBJ(["head", "title"])}</title>
+          <meta
+            name="twitter:title"
+            content={_$(data).OBJ(["head", "title"])}
+          />
+        </Helmet>
         <E>
           <div id={styles.container}>
             <Header {...childProps} />

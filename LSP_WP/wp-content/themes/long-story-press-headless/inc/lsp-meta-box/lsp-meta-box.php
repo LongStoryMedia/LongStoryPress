@@ -133,7 +133,7 @@ class LSP_MB
     public function render_fields()
     {
         if ($this->assets_url) {
-            $this->enqueue_assets();
+          add_action('admin_enqueue_scripts', [$this, 'lsp_load_global']);
         }
         global $post;
         // Nonce field to validate form request came from current site
@@ -259,7 +259,7 @@ class LSP_MB
                   value="<?php echo esc_attr($mb_fields[$field]) ?>"
                   id="<?php echo esc_attr("{$this->id}_{$props['id']}") ?>"
                   class="widefat"
-                  step="<?php if ($props['step']) {
+                  step="<?php if (array_key_exists('step', $props)) {
                     echo esc_attr($props['step']);
                 } ?>"
                   <?php

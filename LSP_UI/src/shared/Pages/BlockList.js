@@ -1,12 +1,12 @@
 import React from "react";
-import PostList from "../Sections/PostList";
+import Collection from "../Sections/Collection";
 import _$ from "long-story-library";
 import PreviewCard from "LSP/Components/PreviewCard";
 import { NavLink } from "react-router-dom";
 import { renderMarkup } from "../utils/helpers";
 import styles from "./blocklist.scss";
 
-const BlockList = PostList(
+const BlockList = Collection(
   ({ lsp_gallery, title, excerpt, slug, param, postType, authenticated }) => (
     <>
       {authenticated && (
