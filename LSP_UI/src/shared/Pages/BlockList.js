@@ -15,7 +15,7 @@ const BlockList = Collection(
           href={`${process.env.LSP_ADMIN}/wp-admin/post-new.php?post_type=${postType}`}
         >
           <PreviewCard
-            title={`add new ${postType.slice(0, postType.length)}`}
+            title={`add new ${postType.slice(0, postType?.length)}`}
             className={styles.contentBox}
           />
         </a>
@@ -41,7 +41,6 @@ const BlockList = Collection(
         }
       </NavLink>
     </>
-  ),
-  {}
+  )
 );
 export default (props) => <BlockList {...props} className={styles.postList} />;

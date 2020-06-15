@@ -1,14 +1,40 @@
 import React from "react";
 
+export const objectToQueryString = (queryObject) =>
+  `?${Object.keys(queryObject)
+    .filter(key => queryObject[key])
+    .map((key) => `${key}=${queryObject[key]}`)
+    .join("&")}`;
+
+export const queryStringToObject = (queryString) => {
+  let queryObject = {};
+  queryString
+    .split("?")
+    .pop()
+    .split("&")
+    .forEach((keyValuePair) => {
+      const keyValueArray = keyValuePair.split("=");
+      queryObject = {
+        ...queryObject,
+        [keyValueArray[0]]: keyValueArray[1],
+      };
+    });
+  return queryObject;
+};
+
 export const styleStringToObject = (styleString) => {
   const styleObject = {};
-  const keys = styleString.split(/[:;]/).filter((key, i) => i % 2 === 0 && !!key);
-  const values = styleString.split(/[:;]/).filter((value, i) => i % 2 === 1 && !!value);
-  for (let i = 0; i < keys.length; i++) {
+  const keys = styleString
+    .split(/[:;]/)
+    .filter((key, i) => i % 2 === 0 && !!key);
+  const values = styleString
+    .split(/[:;]/)
+    .filter((value, i) => i % 2 === 1 && !!value);
+  for (let i = 0; i < keys?.length; i++) {
     styleObject[keys[i].trim()] = values[i].trim();
   }
   return styleObject;
-}
+};
 
 export const filterManifest = (manifest, test, tag) => {
   const isJS = "script" === tag;

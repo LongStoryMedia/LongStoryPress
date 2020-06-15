@@ -20,7 +20,7 @@ export default class Search extends PureComponent {
     const { query } = this.state;
     this.props.history.push(`/search?search=${query.replace(/\s/g, ",")}`);
   };
-  handleChange = e => this.setState({ query: e.currentTarget.value });
+  onChange = e => this.setState({ query: e.currentTarget.value });
   render() {
     const {
       inputClass,
@@ -46,7 +46,7 @@ export default class Search extends PureComponent {
         <input
           ref={this.searchQuery}
           type="text"
-          onChange={this.handleChange}
+          onChange={this.onChange}
           className={inputClass}
           style={{ ...inputStyle, width: w, opacity: o }}
         />

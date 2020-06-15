@@ -12,7 +12,7 @@ const TextQuestion = (props) => (
       autoComplete={props.autoComplete}
       title={props.title}
       value={props.value}
-      onChange={props.handleChange}
+      onChange={props.onChange}
     />
   </div>
 );
@@ -28,7 +28,7 @@ const LongerTextQuestion = (props) => (
       autoComplete={props.autoComplete}
       title={props.title}
       value={props.value}
-      onChange={props.handleChange}
+      onChange={props.onChange}
       rows={props.rows}
     />
   </div>
@@ -47,7 +47,7 @@ const RadioQuestion = (props) => (
             id={[selection, [props.name, props.id].join(".")].join("")}
             name={props.name}
             title={props.title}
-            onClick={props.handleChange}
+            onClick={props.onChange}
           />
           <label
             htmlFor={[selection, [props.name, props.id].join(".")].join("")}
@@ -61,24 +61,19 @@ const RadioQuestion = (props) => (
   </div>
 );
 
-const SelectBox = ({ label, id, name, title, options, handleChange }) => (
+const SelectBox = ({ label, id, name, title, options, onChange }) => (
   <div className={styles.question}>
     <label className={styles.spanTwo}>{label}</label>
     <select
       className={styles.textInput}
       name={name}
       title={title}
-      onClick={handleChange}
+      onChange={onChange}
       id={id}
     >
       {options.map((option, i) => (
-        <option
-          value={option}
-          key={[option, [name, id].join(".")].join("")}
-          id={[option, [name, id].join(".")].join("")}
-          name={name}
-        >
-          {option.title}
+        <option value={option.slug} key={i} id={option.id} name={name}>
+          {option.name}
         </option>
       ))}
     </select>
@@ -94,10 +89,30 @@ const CheckBox = (props) => (
       autoComplete="off"
       title={props.title}
       value={props.value}
-      onChange={props.handleCheck}
+      onChange={props.onChange}
+      data-group={props.group}
+      checked={props.checked}
     />
     <label htmlFor={props.id} className={styles.checkBox} />
     <label className={styles.checkBoxLabel}>{props.label}</label>
+  </div>
+);
+
+const CheckBoxList = ({ options, label, className, onChange, style, group, selected }) => (
+  <div className={[styles.section, className].join(" ")} style={style}>
+    <label className={styles.spanTwo}>{label}</label>
+    {options.map((option, i) => (
+      <CheckBox
+        label={option.name}
+        id={option.id}
+        name={option.name}
+        onChange={onChange}
+        value={option.slug}
+        key={i}
+        group={group}
+        checked={selected?.includes(option.slug)}
+      />
+    ))}
   </div>
 );
 
@@ -218,6 +233,7 @@ export {
   RadioQuestion,
   SelectBox,
   CheckBox,
+  CheckBoxList,
   Text,
   FirstName,
   LastName,
@@ -231,5 +247,5 @@ export {
   YesNo,
   Property,
   Occupation,
-  Sex
+  Sex,
 };

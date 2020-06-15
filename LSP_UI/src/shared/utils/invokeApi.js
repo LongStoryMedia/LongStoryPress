@@ -29,8 +29,9 @@ const invokeApi = async ({
     ...options
   };
   // auth() && headers.append("Authorization", auth().token);
+  const endpoint = apiRoot + slash + path + query;
   try {
-    const res = await fetch(apiRoot + slash + path + query, requestOptions);
+    const res = await fetch(endpoint, requestOptions);
     if (200 !== res.status) {
       if (401 === res.status && props) {
         return props.history.push(

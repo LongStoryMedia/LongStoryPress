@@ -1,6 +1,6 @@
 <?php
 
-class LSP_Posts_Controller extends WP_REST_Posts_Controller
+class LSP_REST_Posts_Controller extends WP_REST_Posts_Controller
 {
 
   /**

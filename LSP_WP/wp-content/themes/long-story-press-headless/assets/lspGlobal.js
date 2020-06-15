@@ -20,7 +20,7 @@ const polyfill = async () => {
           // 1. Let O be ? ToObject(this value).
           var o = Object(this);
           // 2. Let len be ? ToLength(? Get(O, "length")).
-          var len = o.length >>> 0;
+          var len = o?.length >>> 0;
           // 3. If len is 0, return false.
           if (len === 0) {
             return false;
@@ -76,13 +76,13 @@ const polyfill = async () => {
           throw new RangeError("repeat count must be less than infinity");
         }
         count |= 0; // floors and rounds-down it.
-        if (str.length == 0 || count == 0) {
+        if (str?.length == 0 || count == 0) {
           return "";
         }
         // Ensuring count is a 31-bit integer allows us to heavily optimize the
         // main part. But anyway, most current (August 2014) browsers can't handle
         // strings 1 << 28 chars or longer, so:
-        if (str.length * count >= 1 << 28) {
+        if (str?.length * count >= 1 << 28) {
           throw new RangeError(
             "repeat count must not overflow maximum string size"
           );
@@ -91,7 +91,7 @@ const polyfill = async () => {
           // shift it by multiple of 2 because this is binary summation of series
           str += str; // binary summation
         }
-        str += str.substring(0, str.length * count - str.length);
+        str += str.substring(0, str?.length * count - str?.length);
         return str;
       };
     }

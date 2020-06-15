@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import express from "express";
 import path from "path";
 import chalk from "chalk";
+import querystring from "querystring";
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = "production";
 const devMode = process.env.NODE_ENV !== "production";
@@ -30,6 +31,7 @@ export default config => {
 
   app.use((req, res, next) => {
     if (!req.timedout) next();
+    console.log(req.query)
   });
 
   app.use((req, res, next) => {
@@ -80,6 +82,10 @@ export default config => {
     endpoint({ type: "categories", path: "wp/v2/categories" })(config)
   );
   app.use(
+    "/lsp-api/tags",
+    endpoint({ type: "tags", path: "wp/v2/tags" })(config)
+  );
+  app.use(
     "/lsp-api/products",
     endpoint({ type: "products", path: "lsp-api/v1/products" })(config)
   );
@@ -105,12 +111,8 @@ export default config => {
     })(config)
   );
   app.use(
-    "/lsp-api/taxonomies",
-    endpoint({ type: "taxonomies", path: "wp/v2/taxonomies" })(config)
-  );
-  app.use(
     "/lsp-api/settings",
-    endpoint({ type: "settings", path: "lsp-api/v1/settings" })(config)
+    endpoint({ type: "settings", path: "lsp-api/v1/settings", chainAllOptions: false })(config)
   );
   app.use(
     "/lsp-api",

@@ -40,7 +40,7 @@ add_action('rest_api_init', function () {
             ? substr($name, 0, strlen($name) - 1) . 'ies'
             : $name . 's';
         error_log($name . ' : ' . $pluralized_name);
-        (new LSP_Posts_Controller($post_type, $pluralized_name))->register_routes();
+        (new LSP_REST_Posts_Controller($post_type, $pluralized_name))->register_routes();
         register_rest_field(
             $post_type,
             'lsp_gallery',

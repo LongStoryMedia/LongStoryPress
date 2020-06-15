@@ -9,7 +9,7 @@
   var targets = _$.cl(LSP.mb_state.id + "_target");
   var cleanIDstring = function() {
     var imgIds = [];
-    for (var i = 0; i < imgs.length; i++) {
+    for (var i = 0; i < imgs?.length; i++) {
       var imgId = Array.from(_$.kids(imgs[i])).filter(el =>
         Number.isInteger(parseInt(el.id, 10))
       );

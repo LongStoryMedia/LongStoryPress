@@ -3,7 +3,7 @@ jQuery(function($) {
   let flatFields = [],
     obj = {},
     data = {};
-  flatFields.length < 1 &&
+  flatFields?.length < 1 &&
     Object.getOwnPropertyNames(LSP.api.defaults).forEach(function(field) {
       flatFields = flatFields.concat(
         Object.getOwnPropertyNames(LSP.api.defaults[field])

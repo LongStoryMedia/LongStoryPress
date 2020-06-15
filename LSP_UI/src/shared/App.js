@@ -54,7 +54,7 @@ class App extends PureComponent {
   async componentDidMount() {
     const settings = await invokeApi({ path: "/settings" });
     this.setState({
-      settings: settings.body,
+      settings: settings?.body,
     });
   }
   componentWillUnmount() {
@@ -77,8 +77,8 @@ class App extends PureComponent {
       }),
       250
     );
-  getMenu = async (menu) => await invokeApi({ path: `menus/${menu}` });
-  setData = (data) => this.setState({ data });
+  getMenu = async ({slug: menu}) => await invokeApi({ path: `menus/${menu}` });
+  setAppData = (data) => this.setState({ data });
   render() {
     const {
       authenticated,
@@ -91,7 +91,7 @@ class App extends PureComponent {
     const childProps = {
       ...this.props,
       getMenu: this.getMenu,
-      setData: this.setData,
+      setAppData: this.setAppData,
       settings,
       authenticated,
       data,

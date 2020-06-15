@@ -13,7 +13,11 @@ import _$ from "long-story-library";
 import App from "../shared/App";
 import routes from "Site/routes";
 import paths from "../../config/paths";
-import { removeMarkup, filterManifest } from "../shared/utils/helpers";
+import {
+  removeMarkup,
+  filterManifest,
+  objectToQueryString,
+} from "../shared/utils/helpers";
 
 require("regenerator-runtime");
 
@@ -23,7 +27,7 @@ const publicDir =
     ? path.resolve(paths.appRoot, process.env.LSP_URL, "dist", "public")
     : path.resolve(paths.appRoot, process.env.LSP_URL, "public");
 const isEmpty = (obj) =>
-  !!(Object.entries(obj).length === 0 && obj.constructor === Object);
+  !!(Object.entries(obj)?.length === 0 && obj.constructor === Object);
 
 app.use(cors());
 app.use(compression());
@@ -80,14 +84,12 @@ app.get("*", async (req, res) => {
   // the rest can be constructed in ../shared/routes
   const lastParam = req.path.split("/").pop();
   // build querystring
-  const reqParam = isEmpty(req.query)
-    ? lastParam
-    : `${lastParam}?${Object.keys(req.query)
-        .map((key) => `${key}=${req.query[key]}`)
-        .join("&")}`;
+  const reqQuery = objectToQueryString(req.query);
+
+  const reqParam = isEmpty(req.query) ? lastParam : `${lastParam}${reqQuery}`;
 
   const getContent = activeRoute.fetchInitialData
-    ? activeRoute.fetchInitialData(reqParam)
+    ? activeRoute.fetchInitialData({ slug: reqParam, query: reqQuery })
     : Promise.resolve();
 
   const manifest = await fetch(
@@ -105,12 +107,12 @@ app.get("*", async (req, res) => {
 
   const data = await getContent;
   const context = { data };
-  const metaImg = _$(data).OBJ(
-    ["body", "lsp_gallery", 0],
-    _$(data).OBJ(["body", "lsp_galleries", 0, "gallery_images", 0])
-  );
-  const title = _$(data).OBJ(["head", "title"], "");
-  const content = _$(data).OBJ(["body", "content"], "");
+  const metaImg =
+    data?.body?.lsp_gallery?.[0] ||
+    data?.body?.lsp_galleries?.[0]?.gallery_images?.[0]?.src ||
+    "";
+  const title = data?.body?.title || "";
+  const content = data?.body?.content || "";
   const markup = renderToNodeStream(
     <HelmetProvider context={context}>
       <StaticRouter location={req.url} context={context}>
@@ -147,11 +149,9 @@ app.get("*", async (req, res) => {
       <meta name="msapplication-TileColor" content="#131f32" />
       <meta name="msapplication-config" content="/browserconfig.xml" />
       <meta name="theme-color" content="${colors.primary_color}" />
-      <meta name="twitter:image" content="${_$(metaImg).OBJ(["src"])}"/>
-      <meta name="og:image" content="${_$(metaImg).OBJ(["src"])}"/>
-      <meta property="og:image:type" content="${_$(metaImg).OBJ([
-        "mime_type",
-      ])}"/>
+      <meta name="twitter:image" content="${metaImg?.src}"/>
+      <meta name="og:image" content="${metaImg?.src}"/>
+      <meta property="og:image:type" content="${metaImg?.mime_type}"/>
       <meta property="og:description" content="${removeMarkup(content).slice(
         0,
         248

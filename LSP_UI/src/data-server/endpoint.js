@@ -14,28 +14,28 @@ export default ({
   sort = "asc",
   sortBy = "id",
   pwRequired = false,
-  chainAllOptions = true
-}) => config => {
+  chainAllOptions = true,
+}) => (config) => {
   const router = express.Router();
 
-  const isEmpty = obj =>
-    !!(Object.entries(obj).length === 0 && obj.constructor === Object);
+  const isEmpty = (obj) =>
+    !!(Object.entries(obj)?.length === 0 && obj.constructor === Object);
 
-  const qs = string => {
+  const qs = (string) => {
     const sym = /\?/.test(string) ? "&" : "?";
     return `${sym}per_page=${pageLength}&page=${pageNum}&offset=${startAt}&order=${sort}&orderby=${sortBy}`;
   };
 
   const sendIf = ({ item, prop, ifNot = void 0 }) => {
-    const handleArray = arr =>
-      arr.map(a =>
+    const handleArray = (arr) =>
+      arr.map((a) =>
         typeof a === "object" && !Array.isArray(a)
           ? responseObject(a)
           : Array.isArray(a)
           ? handleArray(a)
           : a
       );
-    if (typeof item === "object" && prop && !Array.isArray(item)) {
+    if (typeof item === "object" && prop && !Array.isArray(item))
       return item[prop]
         ? Array.isArray(item[prop])
           ? prop === "wp:featuredmedia" || prop === "author"
@@ -43,10 +43,15 @@ export default ({
             : handleArray(item[prop])
           : item[prop]
         : ifNot;
-    } else return item ? item : ifNot;
+    else
+      return item
+        ? (Array.isArray(item) && item?.length > 0) || !Array.isArray(item)
+          ? item
+          : ifNot
+        : ifNot;
   };
 
-  const responseObject = item => ({
+  const responseObject = (item) => ({
     ...config.wpFields,
     id: sendIf({ item: item.id, ifNot: sendIf({ item: item.ID }) }),
     slug: sendIf({ item: item.slug }),
@@ -57,15 +62,21 @@ export default ({
     content: sendIf({
       item: item.content,
       prop: "rendered",
-      ifNot: sendIf({ item: item.items, ifNot: "" })
+      ifNot: sendIf({ item: item.items, ifNot: "" }),
     }),
     excerpt: sendIf({ item: item.excerpt, prop: "rendered" }),
     description: sendIf({ item: item.description }),
-    categories: sendIf({ item: item.categories }),
-    tags: sendIf({ item: item.tags }),
+    categories: sendIf({
+      item: item.lsp_categories,
+      ifNot: sendIf({ item: item.lsp_product_categories }),
+    }),
+    tags: sendIf({
+      item: item.lsp_tags,
+      ifNot: sendIf({ item: item.lsp_product_tags }),
+    }),
     featuredMedia: sendIf({
       item: item.featured_media,
-      ifNot: 0
+      ifNot: 0,
     }),
     date: sendIf({ item: item.date }),
     modified: sendIf({ item: item.modified }),
@@ -83,16 +94,16 @@ export default ({
     colors: sendIf({ item: item.colors }),
     lsp_galleries: sendIf({ item: item.lsp_galleries }),
     lsp_gallery: sendIf({ item: item.lsp_gallery }),
-    children: sendIf({ item: item.children })
+    children: sendIf({ item: item.children }),
   });
 
   const createResponse = async (req, res, next, data) => {
     const responseObj = Array.isArray(data)
-      ? data.map(item => responseObject(item))
+      ? data.map((item) => responseObject(item))
       : responseObject(data);
     let response =
       Array.isArray(responseObj) && req.params.id
-        ? responseObj.length > 1
+        ? responseObj?.length > 1
           ? responseObj
           : responseObj[0]
           ? responseObj[0]
@@ -105,15 +116,15 @@ export default ({
         type,
         path,
         title: response.title ? response.title : type,
-        slug: response.slug ? response.slug : type
+        slug: response.slug ? response.slug : type,
       },
-      body: response
+      body: response,
     });
   };
 
   const createRequest = async (
     req,
-    res,
+    res, //
     next,
     { path, method = "GET", body, headers }
   ) => {
@@ -130,7 +141,7 @@ export default ({
     body = body ? JSON.stringify(body) : body;
     headers = new Headers({
       ...headers,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     });
     req.headers.authorization &&
       res.setHeader("Authorization", req.headers.authorization);
@@ -144,7 +155,7 @@ export default ({
       return next(e);
     }
   };
-  
+
   router
     .route("/")
     .get(async (req, res, next) => {
@@ -157,7 +168,7 @@ export default ({
         const data = await createRequest(req, res, next, {
           path,
           body: { password, username },
-          method: "POST"
+          method: "POST",
         });
         res
           .cookie(
@@ -167,13 +178,13 @@ export default ({
               secure: devMode ? false : true,
               sameSite: "strict",
               httpOnly: false,
-              expires: new Date(Date.now() + 900000)
+              expires: new Date(Date.now() + 900000),
             }
           )
           .cookie("lsp_signature", data.token.split(".").pop(), {
             secure: devMode ? false : true,
             sameSite: "strict",
-            httpOnly: true
+            httpOnly: true,
           })
           .end();
       }
@@ -195,12 +206,12 @@ export default ({
 
   router.route("/parent/:id").get(async (req, res, next) => {
     const parents = await createRequest(req, res, next, { path, body });
-    const parentId = parents.filter(parent => parent.slug === req.params.id);
+    const parentId = parents.filter((parent) => parent.slug === req.params.id);
     if (!parentId || !parentId[0]) res.send().status(404);
     else {
       const data = await createRequest(req, res, next, {
         path: `${path}?parent=${parentId[0].id}`,
-        body
+        body,
       });
       return createResponse(req, res, next, data);
     }

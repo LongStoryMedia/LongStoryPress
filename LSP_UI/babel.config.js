@@ -5,7 +5,7 @@ module.exports = function(api) {
     "@babel/plugin-proposal-object-rest-spread",
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-class-properties",
-    "react-loadable/babel"
+    "@babel/plugin-proposal-optional-chaining"
   ];
   return {
     presets,

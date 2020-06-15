@@ -1,0 +1,64 @@
+@keyframes blink {
+    0% {
+      opacity: 0.1;
+      font-size: 2em;
+    }
+  
+    20% {
+      opacity: 1;
+      font-size: 4em;
+    }
+  
+    100% {
+      opacity: 0.1;
+      font-size: 8em;
+    }
+  }
+  
+  .infoText {
+    text-align: center;
+  }
+  
+  .loader {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.15);
+    position: relative;
+    z-index: 999;
+    display: flex;
+    top: 0;
+    left: 0;
+  }
+  
+  .dots {
+    position: relative;
+    margin: auto;
+    width: 80%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  
+  .bull {
+    animation-name: blink;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+    animation-duration: 1.4s;
+    color: #4f4f4f;
+    width: 100%;
+    line-height: 100%;
+    text-align: center;
+  }
+  
+  .one {
+    margin-left: 0;
+  }
+  
+  .two {
+    animation-delay: 0.2s;
+  }
+  
+  .three {
+    margin-right: 0;
+    animation-delay: 0.4s;
+  }
+  

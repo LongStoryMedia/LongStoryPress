@@ -36,8 +36,7 @@
 
     &.checkBox,
     &.radio {
-      @include threeD(inset, $color1: $black, $color2: $lightgrey);
-      @include growfont;
+      @include threeD(inset, $color1: $grey, $color2: $white);
       border-radius: 5em;
       width: 1em;
       height: 1em;
@@ -45,8 +44,8 @@
       margin: 0.125em;
 
       &:after {
-        @include threeD(inset, $size: 4, $color1: $white, $color2: $lightgrey);
-        @include slowtransition;
+        @include threeD(inset, $size: 1, $color1: $white, $color2: $lightgrey);
+        @include transition;
         content: "";
         width: 1em;
         height: 1em;
@@ -90,6 +89,7 @@
     border-bottom: 1px $black solid;
     box-shadow: none;
     background-color: $lightgrey;
+    grid-column: 1/3;
 
     &:active,
     &:focus {

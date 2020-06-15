@@ -51,12 +51,12 @@ export default class Login extends PureComponent {
             <Email
               id="email"
               value={this.state.email}
-              handleChange={this.handleInput}
+              onChange={this.handleInput}
             />
             <Password
               id="password"
               value={this.state.password}
-              handleChange={this.handleInput}
+              onChange={this.handleInput}
             />
             <span className={styles.reset}>
               <Link className={styles.pwreset} to="/my-account/password-reset">
