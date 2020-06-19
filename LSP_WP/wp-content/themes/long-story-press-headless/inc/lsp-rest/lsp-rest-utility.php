@@ -208,10 +208,7 @@ function lsp_get_tags_for_product($post)
     $tags = array();
     if (!empty($terms) && !is_wp_error($terms)) {
         foreach ($terms as $term) {
-            $tags[] = [
-                'slug' => $term->slug,
-                'id' => $term->term_id
-            ];
+            $tags[] = $term->term_id;
         }
     }
     return $tags;
@@ -225,10 +222,7 @@ function lsp_get_tags_for_post($post)
     $tags = array();
     if (!empty($terms) && !is_wp_error($terms)) {
         foreach ($terms as $term) {
-            $tags[] = [
-                'slug' => $term->slug,
-                'id' => $term->term_id
-            ];
+            $tags[] = $term->term_id;
         }
     }
     return $tags;
@@ -242,10 +236,7 @@ function lsp_get_categories_for_product($post)
     $tags = array();
     if (!empty($terms) && !is_wp_error($terms)) {
         foreach ($terms as $term) {
-            $tags[] = [
-                'slug' => $term->slug,
-                'id' => $term->term_id
-            ];
+            $tags[] = $term->term_id;
         }
     }
     return $tags;
@@ -259,10 +250,7 @@ function lsp_get_categories_for_post($post)
     $tags = array();
     if (!empty($terms) && !is_wp_error($terms)) {
         foreach ($terms as $term) {
-            $tags[] = [
-                'slug' => $term->slug,
-                'id' => $term->term_id
-            ];
+            $tags[] = $term->term_id;
         }
     }
     return $tags;

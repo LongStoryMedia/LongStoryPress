@@ -1,14 +1,23 @@
 @import "../static/_required.scss";
 
 .postList {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
 
-    .listItem {
-        text-decoration: none;
-        display: block;
-        margin: 1em 0;
-        width: 300px;
+  .listItem {
+    text-decoration: none;
+    display: block;
+    margin: 1em 0;
+    width: 300px;
+    .postTitle {
+      @include simpleunderline;
+      opacity: 0.65;
     }
+    &:hover {
+      .postTitle {
+        opacity: 1;
+      }
+    }
+  }
 }

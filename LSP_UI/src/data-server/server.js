@@ -8,7 +8,6 @@ import cookieParser from "cookie-parser";
 import express from "express";
 import path from "path";
 import chalk from "chalk";
-import querystring from "querystring";
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = "production";
 const devMode = process.env.NODE_ENV !== "production";
@@ -31,7 +30,6 @@ export default config => {
 
   app.use((req, res, next) => {
     if (!req.timedout) next();
-    console.log(req.query)
   });
 
   app.use((req, res, next) => {

@@ -29,24 +29,22 @@ add_action('init', function () {
 
 add_action('rest_api_init', function () {
     $namespace = 'lsp-api/v1';
-    $post_types = array_values(get_post_types(['public' => true, '_builtin' => false]));
-
-    array_push($post_types, 'post', 'page');
+    $post_types = array_unique(array_merge(array_values(get_post_types(['public' => true, '_builtin' => false])), ['page', 'post']));
 
     foreach ($post_types as $post_type) {
         $unprefix = explode("_", $post_type, 2);
         $name = array_pop($unprefix);
-        $pluralized_name = substr($name, -1) == "y"
+        $pluralized_name = substr($name, -1) == 'y'
             ? substr($name, 0, strlen($name) - 1) . 'ies'
             : $name . 's';
-        error_log($name . ' : ' . $pluralized_name);
-        (new LSP_REST_Posts_Controller($post_type, $pluralized_name))->register_routes();
+        $post_controller = new LSP_REST_Posts_Controller($post_type, $pluralized_name);
+        $post_controller->register_routes();
         register_rest_field(
             $post_type,
             'lsp_gallery',
             [
                 'get_callback' => 'lsp_gallery_rest_cb',
-                'schema' => null,
+                'schema' => $post_controller->get_public_item_schema(),
             ]
         );
         register_rest_field(
@@ -54,58 +52,69 @@ add_action('rest_api_init', function () {
             'children',
             [
                 'get_callback' => 'lsp_get_children_for_page',
-                'schema' => null,
+                'schema' => $post_controller->get_public_item_schema(),
             ]
         );
-        // if(strpos($post_type, 'product') === true){
-            register_rest_field(
-                $post_type,
-                'price',
-                [
-                    'get_callback' => 'lsp_get_price_for_product',
-                    'schema' => null,
-                ]
-            );
-            register_rest_field(
-                $post_type,
-                'lsp_product_tags',
-                [
-                    'get_callback' => 'lsp_get_tags_for_product',
-                    'schema' => null
-                ]
-            );
-            register_rest_field(
-                $post_type,
-                'lsp_product_categories',
-                [
-                    'get_callback' => 'lsp_get_categories_for_product',
-                    'schema' => null
-                ]
-            );
-        // }
-        // if(strpos($post_type, 'page') === true || strpos($post_type, 'post') === true){
-            register_rest_field(
-                $post_type,
-                'lsp_tags',
-                [
-                    'get_callback' => 'lsp_get_tags_for_post',
-                    'schema' => null
-                ]
-            );
-            register_rest_field(
-                $post_type,
-                'lsp_categories',
-                [
-                    'get_callback' => 'lsp_get_categories_for_post',
-                    'schema' => null
-                ]
-            );
-        // }
+        register_rest_field(
+            $post_type,
+            'price',
+            [
+                'get_callback' => 'lsp_get_price_for_product',
+                'schema' => $post_controller->get_public_item_schema(),
+            ]
+        );
+        register_rest_field(
+            $post_type,
+            'lsp_product_tags',
+            [
+                'get_callback' => 'lsp_get_tags_for_product',
+                'schema' => $post_controller->get_public_item_schema()
+            ]
+        );
+        register_rest_field(
+            $post_type,
+            'lsp_product_categories',
+            [
+                'get_callback' => 'lsp_get_categories_for_product',
+                'schema' => $post_controller->get_public_item_schema()
+            ]
+        );
+        register_rest_field(
+            $post_type,
+            'lsp_tags',
+            [
+                'get_callback' => 'lsp_get_tags_for_post',
+                'schema' => $post_controller->get_public_item_schema()
+            ]
+        );
+        register_rest_field(
+            $post_type,
+            'lsp_categories',
+            [
+                'get_callback' => 'lsp_get_categories_for_post',
+                'schema' => $post_controller->get_public_item_schema()
+            ]
+        );
+        add_filter('rest_' . $post_type . '_query', 'lsp_add_taxonomy_filters', 10, 2);
     }
     (new LSP_Settings_Endpoints())->add_routes();
     (new LSP_Attachments_Controller('attachment'))->register_routes();
     (new LSP_REST_Menus($namespace))->register_routes();
 });
+
+function lsp_add_taxonomy_filters($args, $request)
+{
+    global $wp;
+    $vars = apply_filters('rest_query_vars', $wp->public_query_vars);
+    $vars = array_unique(array_merge($vars, array('meta_query', 'meta_key', 'meta_value', 'meta_compare', 'lsp_tags', 'lsp_categories')));
+
+    foreach ($vars as $var) {
+        if (isset($request[$var])) {
+            $args[$var] = $request[$var];
+        }
+    }
+    return $args;
+}
 
 function lsp_load_global($hook)
 {

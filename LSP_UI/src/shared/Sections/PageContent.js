@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { renderMarkup, removeMarkup } from "LSP/utils/helpers";
 import {
@@ -36,7 +36,7 @@ const PageContent = (WC) =>
         setParsedContent(renderMarkup({ markup: body?.content }));
       }
     };
-    useLayoutEffect(() => {
+    useEffect(() => {
       setGalleryIfGallery(props.data?.body);
     }, [props.data]);
     return (

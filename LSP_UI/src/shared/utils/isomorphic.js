@@ -12,6 +12,9 @@ const isomorphic = (WC) => ({ param, useMeta = true, ...props }) => {
     return obj;
   };
   useEffect(() => {
+    if(__isBrowser__){
+      delete window?.__INITIAL_DATA__
+    }
     (async () => {
       setData(
         await props.fetchInitialData({
@@ -21,6 +24,7 @@ const isomorphic = (WC) => ({ param, useMeta = true, ...props }) => {
       );
       props.setAppData(data);
     })();
+    return () => setData({})
   }, [location]);
   return (
     <WC {...props} data={data} useMeta={useMeta} param={deref(props, param)} />

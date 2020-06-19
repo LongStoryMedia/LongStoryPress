@@ -3,7 +3,6 @@ import Collection from "../Sections/Collection";
 import _$ from "long-story-library";
 import PreviewCard from "LSP/Components/PreviewCard";
 import { NavLink } from "react-router-dom";
-import { renderMarkup } from "../utils/helpers";
 import styles from "./blocklist.scss";
 
 const BlockList = Collection(
@@ -23,19 +22,18 @@ const BlockList = Collection(
       <NavLink className={styles.listItem} to={`/${param}/${slug}`}>
         {
           <PreviewCard
-            featuredMedia={_$(lsp_gallery).OBJ([
-              0,
-              "media_details",
-              "sizes",
-              "medium",
-              "source_url",
-            ])}
-            title={renderMarkup({ markup: title })}
+            featuredMedia={
+              lsp_gallery?.[0]?.media_details?.sizes?.medium?.source_url
+            }
+            title={title}
             content={excerpt}
-            className={[
-              styles.contentBox,
+            className={styles.contentBox}
+            titleClass={[
+              styles.postTitle,
               "background_background_two",
               "color_text_color",
+              "hover_color_accent_color",
+              "pseudo_background_secondary_color",
             ].join(" ")}
           />
         }

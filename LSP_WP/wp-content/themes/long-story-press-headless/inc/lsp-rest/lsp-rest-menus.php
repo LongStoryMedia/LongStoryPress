@@ -49,7 +49,7 @@ class LSP_REST_Menus
      *
      * @return array All registered menus
      */
-    public static function get_menus()
+    public function get_menus()
     {
         $rest_url = trailingslashit(get_rest_url() . $this->namespace . '/menus/');
         $wp_menus = wp_get_nav_menus();
