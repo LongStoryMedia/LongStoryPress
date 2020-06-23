@@ -63,58 +63,72 @@ add_action('rest_api_init', function () {
                 'schema' => $post_controller->get_public_item_schema(),
             ]
         );
-        register_rest_field(
-            $post_type,
-            'lsp_product_tags',
-            [
-                'get_callback' => 'lsp_get_tags_for_product',
-                'schema' => $post_controller->get_public_item_schema()
-            ]
-        );
-        register_rest_field(
-            $post_type,
-            'lsp_product_categories',
-            [
-                'get_callback' => 'lsp_get_categories_for_product',
-                'schema' => $post_controller->get_public_item_schema()
-            ]
-        );
-        register_rest_field(
-            $post_type,
-            'lsp_tags',
-            [
-                'get_callback' => 'lsp_get_tags_for_post',
-                'schema' => $post_controller->get_public_item_schema()
-            ]
-        );
-        register_rest_field(
-            $post_type,
-            'lsp_categories',
-            [
-                'get_callback' => 'lsp_get_categories_for_post',
-                'schema' => $post_controller->get_public_item_schema()
-            ]
-        );
-        add_filter('rest_' . $post_type . '_query', 'lsp_add_taxonomy_filters', 10, 2);
+        if (strpos($post_type, "product") !== FALSE) {
+            register_rest_field(
+                $post_type,
+                'lsp_tags',
+                [
+                    'get_callback' => 'lsp_get_tags_for_product',
+                    'schema' => $post_controller->get_public_item_schema()
+                ]
+            );
+            register_rest_field(
+                $post_type,
+                'lsp_categories',
+                [
+                    'get_callback' => 'lsp_get_categories_for_product',
+                    'schema' => $post_controller->get_public_item_schema()
+                ]
+            );
+            add_filter('rest_' . $post_type . '_query', function ($args, $request) {
+                if (empty($request['lsp_tags_filter']) && empty($request['lsp_categories_filter'])) {
+                    return $args;
+                }
+                if (isset($request['lsp_tags_filter'])) {
+                    $args['product_tag'] = $request['lsp_tags_filter'];
+                }
+                if (isset($request['lsp_categories_filter'])) {
+                    $args['product_cat'] = $request['lsp_categories_filter'];
+                }
+                return $args;
+            }, 10, 2);
+        } else {
+            register_rest_field(
+                $post_type,
+                'lsp_tags',
+                [
+                    'get_callback' => 'lsp_get_tags_for_post',
+                    'schema' => $post_controller->get_public_item_schema()
+                ]
+            );
+            register_rest_field(
+                $post_type,
+                'lsp_categories',
+                [
+                    'get_callback' => 'lsp_get_categories_for_post',
+                    'schema' => $post_controller->get_public_item_schema()
+                ]
+            );
+            add_filter('rest_' . $post_type . '_query', function ($args, $request) {
+                if (empty($request['lsp_tags_filter']) && empty($request['lsp_categories_filter'])) {
+                    return $args;
+                }
+                if (isset($request['lsp_tags_filter'])) {
+                    $args['tag'] = $request['lsp_tags_filter'];
+                }
+                if (isset($request['lsp_categories_filter'])) {
+                    $args['category_name'] = $request['lsp_categories_filter'];
+                }
+                return $args;
+            }, 10, 2);
+        }
     }
     (new LSP_Settings_Endpoints())->add_routes();
     (new LSP_Attachments_Controller('attachment'))->register_routes();
     (new LSP_REST_Menus($namespace))->register_routes();
 });
 
-function lsp_add_taxonomy_filters($args, $request)
-{
-    global $wp;
-    $vars = apply_filters('rest_query_vars', $wp->public_query_vars);
-    $vars = array_unique(array_merge($vars, array('meta_query', 'meta_key', 'meta_value', 'meta_compare', 'lsp_tags', 'lsp_categories')));
 
-    foreach ($vars as $var) {
-        if (isset($request[$var])) {
-            $args[$var] = $request[$var];
-        }
-    }
-    return $args;
-}
 
 function lsp_load_global($hook)
 {

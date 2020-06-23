@@ -162,7 +162,7 @@ function lsp_gallery_rest_cb($post)
 function lsp_get_children_for_page($post)
 {
     $post_id = is_array($post) ? $post['id'] : $post->ID;
-    $post_link = is_array($post) ? $post['link'] : $post->link;
+    // $post_link = is_array($post) ? $post['link'] : $post->link;
     $children = get_posts([
         'post_type' => 'any',
         'post_parent' => $post_id
@@ -184,7 +184,7 @@ function lsp_get_children_for_page($post)
             'lsp_gallery' => lsp_gallery_rest_cb($child),
             'children' => lsp_get_children_for_page($child),
             'price' => lsp_get_price_for_product($child),
-            'link' => $post_link . $child->post_name,
+            // 'link' => $post_link . $child->post_name,
             'lsp_subsection' => $child_sub
         ];
     }
@@ -208,7 +208,7 @@ function lsp_get_tags_for_product($post)
     $tags = array();
     if (!empty($terms) && !is_wp_error($terms)) {
         foreach ($terms as $term) {
-            $tags[] = $term->term_id;
+            $tags[] = ['id' => $term->term_id, 'slug' => $term->slug];
         }
     }
     return $tags;
@@ -222,7 +222,7 @@ function lsp_get_tags_for_post($post)
     $tags = array();
     if (!empty($terms) && !is_wp_error($terms)) {
         foreach ($terms as $term) {
-            $tags[] = $term->term_id;
+            $tags[] = ['id' => $term->term_id, 'slug' => $term->slug];
         }
     }
     return $tags;
@@ -236,7 +236,7 @@ function lsp_get_categories_for_product($post)
     $tags = array();
     if (!empty($terms) && !is_wp_error($terms)) {
         foreach ($terms as $term) {
-            $tags[] = $term->term_id;
+            $tags[] = ['id' => $term->term_id, 'slug' => $term->slug];
         }
     }
     return $tags;
@@ -250,7 +250,7 @@ function lsp_get_categories_for_post($post)
     $tags = array();
     if (!empty($terms) && !is_wp_error($terms)) {
         foreach ($terms as $term) {
-            $tags[] = $term->term_id;
+            $tags[] = ['id' => $term->term_id, 'slug' => $term->slug];
         }
     }
     return $tags;

@@ -15,6 +15,23 @@ export default ({
   sortBy = "id",
   pwRequired = false,
   chainAllOptions = true,
+  fields = [
+    "slug",
+    "excerpt",
+    "content",
+    "title",
+    "id",
+    "featured_media",
+    "lsp_tags",
+    "lsp_categories",
+    "children",
+    "price",
+    "url",
+    "items",
+    "lsp_galleries",
+  ],
+  tags,
+  categories,
 }) => (config) => {
   const router = express.Router();
 
@@ -23,7 +40,11 @@ export default ({
 
   const qs = (string) => {
     const sym = /\?/.test(string) ? "&" : "?";
-    return `${sym}per_page=${pageLength}&page=${pageNum}&offset=${startAt}&order=${sort}&orderby=${sortBy}`;
+    return `${sym}per_page=${pageLength}&page=${pageNum}&offset=${startAt}&order=${sort}&orderby=${sortBy}&_fields=${fields.join(
+      ","
+    )}${tags ? `lsp_tags_filter=${tags}` : ""}${
+      categories ? `lsp_categories_filter=${categories}` : ""
+    }`;
   };
 
   const sendIf = ({ item, prop, ifNot = void 0 }) => {
@@ -146,12 +167,12 @@ export default ({
     req.headers.authorization &&
       res.setHeader("Authorization", req.headers.authorization);
     try {
-      const request = await fetch(
-        `${config.url}/wp-json${slash}${path}${query}${options}`,
-        { method, headers, body }
-      );
+      const reqUrl = `${config.url}/wp-json${slash}${path}${query}${options}`;
+      console.log(reqUrl);
+      const request = await fetch(reqUrl, { method, headers, body });
       return await request.json();
     } catch (e) {
+      console.error("error in createRequest (endpoint.js)");
       return next(e);
     }
   };
