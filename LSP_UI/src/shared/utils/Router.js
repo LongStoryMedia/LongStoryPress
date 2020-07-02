@@ -11,7 +11,7 @@ export default ({ childProps }) => (
         path={path}
         exact={exact}
         render={props => {
-          return <Component {...childProps} {...props} {...rest} />;
+          return <Component {...childProps} {...rest} />;
         }}
       />
     ))}

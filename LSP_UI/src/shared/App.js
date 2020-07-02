@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import invokeApi from "LSP/utils/invokeApi";
@@ -10,24 +10,51 @@ import Header from "Site/Sections/Header";
 import Footer from "Site/Sections/Footer";
 import styles from "./app.scss";
 
-class App extends PureComponent {
-  constructor(props) {
-    super(props);
-    const baseState = {
-      authenticated: false,
-      settings: {
-        site: { tagline: "", title: "" },
-        contact: {},
-        colors: {},
-      },
-      data: {},
-    };
+const App = (props) => {
+  const [authenticated, setAuthenticated] = useState();
+
+  const [settings, setSettings] = useState({
+    site: { tagline: "", title: "" },
+    contact: {},
+    colors: {},
+  })
+
+  const [appWindow, setAppWindow] = useState({
+    height: 0,
+    width: 0,
+    scroll: 0,
+  })
+  
+  const handleScroll = (e) => {
+    throttle(
+      setAppWindow({
+        ...appWindow,
+        scrollTop: e.currentTarget.scrollY,
+      }),
+      250
+    );
+  };
+
+  const handleWindowSize = (e) =>
+    throttle(
+      setAppWindow({
+        ...appWindow,
+        clientWidth: e.currentTarget.innerWidth,
+        clientHeight: e.currentTarget.innerHeight,
+      }),
+      250
+    );
+
+  const getMenu = async ({ slug: menu }) =>
+      await invokeApi({ path: `menus/${menu}` });
+
+  useEffect(() => {
     if (__isBrowser__) {
       ((_$) => {
         _$.addListener(
           window,
-          "scroll",
-          this.handleScroll,
+          ["load", "scroll"],
+          handleScroll,
           false,
           { passive: true, capture: true },
           true
@@ -35,90 +62,53 @@ class App extends PureComponent {
         _$.addListener(
           window,
           ["load", "resize"],
-          this.handleWindowSize,
+          handleWindowSize,
           false,
           { passive: true, capture: true, once: true },
           true
         );
       })(new _$());
-      this.state = {
-        ...baseState,
-        clientWidth: window.innerWidth,
-        clientHeight: window.innerHeight,
-        scrollTop: 0,
-      };
-    } else {
-      this.state = baseState;
+
+      setAppWindow({
+        height: window.innerHeight,
+        width: window.innterWidth,
+        scroll: 0
+      })
     }
-  }
-  async componentDidMount() {
-    const settings = await invokeApi({ path: "/settings" });
-    this.setState({
-      settings: settings?.body,
-    });
-  }
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
-    window.removeEventListener("resize", this.handleWindowSize);
-  }
-  handleScroll = (e) => {
-    throttle(
-      this.setState({
-        scrollTop: e.currentTarget.scrollY,
-      }),
-      250
-    );
+
+    (async () => {
+      const _settings = await invokeApi({ path: "settings" });
+      setSettings(_settings?.body);
+    })();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleWindowSize);
+    }
+  }, [])
+
+  const childProps = {
+    ...props,
+    getMenu,
+    settings,
+    authenticated,
+    scrollTop: appWindow?.scroll,
+    clientWidth: appWindow?.width,
+    clientHeight: appWindow?.height,
   };
-  handleWindowSize = (e) =>
-    throttle(
-      this.setState({
-        clientWidth: e.currentTarget.innerWidth,
-        clientHeight: e.currentTarget.innerHeight,
-      }),
-      250
-    );
-  getMenu = async ({slug: menu}) => await invokeApi({ path: `menus/${menu}` });
-  setAppData = (data) => this.setState({ data });
-  render() {
-    const {
-      authenticated,
-      settings,
-      scrollTop,
-      clientWidth,
-      clientHeight,
-      data,
-    } = this.state;
-    const childProps = {
-      ...this.props,
-      getMenu: this.getMenu,
-      setAppData: this.setAppData,
-      settings,
-      authenticated,
-      data,
-      scrollTop: scrollTop || 0,
-      clientWidth: clientWidth || void 0,
-      clientHeight: clientHeight || void 0,
-    };
-    return (
-      <HelmetProvider>
-        <Helmet>
-          <title>{_$(data).OBJ(["head", "title"])}</title>
-          <meta
-            name="twitter:title"
-            content={_$(data).OBJ(["head", "title"])}
-          />
-        </Helmet>
-        <E>
-          <div id={styles.container}>
-            <Header {...childProps} />
-            <div className={styles.Wrapper}>
-              <Router {...this.props} childProps={childProps} />
-            </div>
-            <Footer {...childProps} />
+  
+  return (
+    <HelmetProvider>
+      <E>
+        <div id={styles.container}>
+          <Header {...childProps} />
+          <div className={styles.Wrapper}>
+            <Router childProps={childProps} />
           </div>
-        </E>
-      </HelmetProvider>
-    );
-  }
+          <Footer {...childProps} />
+        </div>
+      </E>
+    </HelmetProvider>
+  );
 }
 export default withRouter(App);

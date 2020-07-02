@@ -1,5 +1,6 @@
 import express from "express";
 import fetch from "isomorphic-fetch";
+import { isEmptyObject, objectToQueryString } from "LSP/utils/helpers";
 
 const devMode = process.env.NODE_ENV === "development";
 
@@ -21,6 +22,7 @@ export default ({
     "content",
     "title",
     "id",
+    "name",
     "featured_media",
     "lsp_tags",
     "lsp_categories",
@@ -29,14 +31,12 @@ export default ({
     "url",
     "items",
     "lsp_galleries",
+    "lsp_gallery",
   ],
   tags,
   categories,
 }) => (config) => {
   const router = express.Router();
-
-  const isEmpty = (obj) =>
-    !!(Object.entries(obj)?.length === 0 && obj.constructor === Object);
 
   const qs = (string) => {
     const sym = /\?/.test(string) ? "&" : "?";
@@ -130,8 +130,9 @@ export default ({
           ? responseObj[0]
           : responseObj
         : responseObj;
-    if (pwRequired && !req.headers.authorization)
+    if (pwRequired && !req.headers.authorization) {
       res.json({ error: "Please login to access your content", status: 401 });
+    }
     await res.json({
       head: {
         type,
@@ -149,15 +150,13 @@ export default ({
     next,
     { path, method = "GET", body, headers }
   ) => {
+    let queryKeys = Object.keys(req.query);
+    for (let key of queryKeys) {
+      req.query[`lsp_${key}_filter`] = req.query[key];
+      delete req.query[key];
+    }
     const slash = "/" === path[0] ? "" : "/";
-    const query = isEmpty(req.query)
-      ? ""
-      : `${Object.keys(req.query)
-          .map((key, i) => {
-            const sym = i === 0 ? "?" : "&";
-            return `${sym}${key}=${req.query[key]}`;
-          })
-          .join("")}`;
+    const query = objectToQueryString(req.query);
     const options = chainAllOptions ? qs(`${path}${query}`) : "";
     body = body ? JSON.stringify(body) : body;
     headers = new Headers({
@@ -168,7 +167,6 @@ export default ({
       res.setHeader("Authorization", req.headers.authorization);
     try {
       const reqUrl = `${config.url}/wp-json${slash}${path}${query}${options}`;
-      console.log(reqUrl);
       const request = await fetch(reqUrl, { method, headers, body });
       return await request.json();
     } catch (e) {

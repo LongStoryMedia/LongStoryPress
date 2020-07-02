@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 import styles from "./blocklist.scss";
 
 const BlockList = Collection(
-  ({ lsp_gallery, title, excerpt, slug, param, postType, authenticated }) => (
+  ({ lsp_gallery, title, excerpt, slug, postType, authenticated, match }) => (
     <>
       {authenticated && (
         <a
@@ -19,7 +19,7 @@ const BlockList = Collection(
           />
         </a>
       )}
-      <NavLink className={styles.listItem} to={`/${param}/${slug}`}>
+      <NavLink className={styles.listItem} to={`/${match.params[0]}/${slug}`}>
         {
           <PreviewCard
             featuredMedia={

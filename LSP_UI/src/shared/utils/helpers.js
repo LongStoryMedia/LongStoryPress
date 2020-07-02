@@ -1,10 +1,15 @@
 import React from "react";
 
+export const isEmptyObject = (obj) =>
+  !!(Object.entries(obj)?.length === 0 && obj.constructor === Object);
+
 export const objectToQueryString = (queryObject) =>
-  `?${Object.keys(queryObject)
-    .filter(key => queryObject[key])
-    .map((key) => `${key}=${queryObject[key]}`)
-    .join("&")}`;
+  !isEmptyObject(queryObject)
+    ? `?${Object.keys(queryObject)
+        .filter((key) => queryObject[key])
+        .map((key) => `${key}=${queryObject[key]}`)
+        .join("&")}`
+    : "";
 
 export const queryStringToObject = (queryString) => {
   let queryObject = {};

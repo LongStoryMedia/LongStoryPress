@@ -53,6 +53,7 @@ LSP_WP/wp-includes**
 **logo.*
 **server.conf
 **.nginx.conf
+LSP_WP/*-assets/
 
 lsp
 

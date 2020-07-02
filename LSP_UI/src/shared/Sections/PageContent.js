@@ -18,7 +18,8 @@ const PageContent = (WC) =>
     const metaImg =
       props?.data?.body?.lsp_gallery?.[0] ||
       props?.data?.body?.lsp_galleries?.[0]?.gallery_images?.[0]?.src;
-    const setGalleryIfGallery = (body) => {
+      
+    const parseContent = (body) => {
       if (body?.content && getGalleryCommentJson(body?.content)) {
         setParsedContent(
           injectGallery(
@@ -37,8 +38,8 @@ const PageContent = (WC) =>
       }
     };
     useEffect(() => {
-      setGalleryIfGallery(props.data?.body);
-    }, [props.data]);
+      parseContent(props.data?.body);
+    }, []);
     return (
       <>
         <Helmet>
