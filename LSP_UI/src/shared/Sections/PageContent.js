@@ -9,9 +9,11 @@ import {
 import _$ from "long-story-library";
 import styles from "./pagecontent.scss";
 import isomorphic from "LSP/utils/isomorphic";
+import { useLocation } from "react-router";
 
 const PageContent = (WC) =>
   isomorphic((props) => {
+    let location = useLocation();
     const [parsedContent, setParsedContent] = useState(
       props?.data?.body?.content
     );
@@ -39,7 +41,7 @@ const PageContent = (WC) =>
     };
     useEffect(() => {
       parseContent(props.data?.body);
-    }, []);
+    }, [props.data]);
     return (
       <>
         <Helmet>
