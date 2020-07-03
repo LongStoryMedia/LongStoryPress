@@ -1,6 +1,7 @@
 import express from "express";
 import fetch from "isomorphic-fetch";
 import { isEmptyObject, objectToQueryString } from "LSP/utils/helpers";
+import { https } from "follow-redirects";
 
 const devMode = process.env.NODE_ENV === "development";
 
@@ -184,28 +185,64 @@ export default ({
     .post(async (req, res, next) => {
       if (type === "login") {
         const { password, username } = req.body;
-        const data = await createRequest(req, res, next, {
-          path,
-          body: { password, username },
+        // const data = await createRequest(req, res, next, {
+        //   path,
+        //   body: { password, username },
+        //   method: "POST",
+        // });
+        const options = {
           method: "POST",
-        });
-        res
-          .cookie(
-            "lsp_header_payload",
-            data.token.slice(0, data.token.lastIndexOf(".")),
-            {
-              secure: devMode ? false : true,
-              sameSite: "strict",
-              httpOnly: false,
-              expires: new Date(Date.now() + 900000),
+          hostname: config.url.split("://").pop(),
+          path: `/wp-json/${path}`,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          maxRedirects: 20,
+        };
+        const request = https.request(options, function (response) {
+          const chunks = [];
+
+          response.on("data", function (chunk) {
+            chunks.push(chunk);
+          });
+
+          response.on("end", function (chunk) {
+            const data = JSON.parse(Buffer.concat(chunks));
+            console.log(data);
+            if (/incorrect_password$/.test(data.code)) {
+              res.json({ message: "incorrect email or password." });
+            } else {
+              console.log(data);
+              res
+                .cookie(
+                  "lsp_header_payload",
+                  data.token.slice(0, data.token.lastIndexOf(".")),
+                  {
+                    secure: devMode ? false : true,
+                    sameSite: "strict",
+                    httpOnly: false,
+                    expires: new Date(Date.now() + 900000),
+                  }
+                )
+                .cookie("lsp_signature", data.token.split(".").pop(), {
+                  secure: devMode ? false : true,
+                  sameSite: "strict",
+                  httpOnly: true,
+                })
+                .end();
             }
-          )
-          .cookie("lsp_signature", data.token.split(".").pop(), {
-            secure: devMode ? false : true,
-            sameSite: "strict",
-            httpOnly: true,
-          })
-          .end();
+          });
+
+          response.on("error", function (error) {
+            console.error(error);
+          });
+        });
+
+        const postData = JSON.stringify({ password, username });
+
+        request.write(postData);
+
+        request.end();
       }
     });
 
