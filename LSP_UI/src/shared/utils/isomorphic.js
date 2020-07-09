@@ -12,7 +12,6 @@ const isomorphic = (WC) => (props) => {
       delete window?.__INITIAL_DATA__;
     }
     (async () => {
-      console.log(data)
       if ((data && slug !== data?.head?.slug) || !data) {
         setData(
           await props.fetchInitialData({
@@ -22,7 +21,6 @@ const isomorphic = (WC) => (props) => {
         );
       }
     })();
-    // return () => setData({});
   }, [location]);
   return <WC {...props} data={data} />;
 };

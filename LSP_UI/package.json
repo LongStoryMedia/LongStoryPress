@@ -97,6 +97,7 @@
     "isomorphic-fetch": "^2.2.1",
     "long-story-library": "^0.0.23",
     "mysql": "^2.16.0",
+    "node-cache": "^5.1.2",
     "node-gyp": "^3.8.0",
     "node-sass": "^4.10.0",
     "react": "^16.5.2",
