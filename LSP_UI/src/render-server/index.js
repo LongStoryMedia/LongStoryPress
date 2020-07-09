@@ -3,7 +3,7 @@ import cors from "cors";
 import path from "path";
 import React from "react";
 import chalk from "chalk";
-import { renderToNodeStream } from "react-dom/server";
+import { renderToStream } from "react-dom/server";
 import { StaticRouter, matchPath } from "react-router-dom";
 import compression from "compression";
 import { preloadAll } from "react-loadable";
@@ -113,7 +113,7 @@ app.get("*", async (req, res) => {
     "";
   const title = data?.body?.title || "";
   const content = data?.body?.content || "";
-  const markup = renderToNodeStream(
+  const markup = renderToStream(
     <HelmetProvider context={context}>
       <StaticRouter location={req.url} context={context}>
         <App />

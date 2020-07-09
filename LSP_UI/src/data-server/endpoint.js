@@ -153,8 +153,8 @@ export default ({
     const cacheKey = req.params?.id
       ? `${type}_${path}_${req.params.id}`
       : `${type}_${path}`;
-    const cacheData = cache.get(cacheKey);
-    if (cacheData) {
+    const cacheData = cache?.get(cacheKey);
+    if (cacheData && method === "GET") {
       return cacheData;
     }
 
@@ -183,7 +183,10 @@ export default ({
       const request = await fetch(reqUrl, { method, headers, body });
       const response = await request.json();
       const _json = await cb(req, response);
-      cache.set(cacheKey, _json);
+      console.log(_json);
+      if (method === "GET") {
+        cache.set(cacheKey, _json);
+      }
       return _json;
     } catch (e) {
       console.error("error in createRequest (endpoint.js)");
@@ -208,19 +211,32 @@ export default ({
     .post(async (req, res, next) => {
       if (type === "login") {
         const { password, username } = req.body;
-        res.json(
-          await createRequest(
-            req,
-            res,
-            next,
-            {
-              pathname: path,
-              body: { password, username },
-              method: "POST",
-            },
-            (req, data) => data
-          )
+        const data = await createRequest(
+          req,
+          res,
+          next,
+          {
+            pathname: path,
+            body: { password, username },
+            method: "POST",
+          },
+          (req, data) => data
         );
+        res.cookie(
+            "lsp_header_payload",
+            data.token.slice(0, data.token.lastIndexOf(".")),
+            {
+              secure: devMode ? false : true,
+              sameSite: "strict",
+              httpOnly: false,
+            }
+          )
+          .cookie("lsp_signature", data.token.split(".").pop(), {
+            secure: devMode ? false : true,
+            sameSite: "strict",
+            httpOnly: true,
+          })
+          .end();
       }
     });
 

@@ -50,10 +50,11 @@ export default (config) => {
 
   app.use(
     "/lsp-api/login",
-    endpoint({ type: "login", path: "jwt-auth/v1/token" })(
-      config,
-      new NodeCache({ stdTTL: 1 })
-    )
+    endpoint({
+      type: "login",
+      path: "jwt-auth/v1/token",
+      chainAllOptions: false,
+    })(config)
   );
   app.use(
     "/lsp-api/search",
