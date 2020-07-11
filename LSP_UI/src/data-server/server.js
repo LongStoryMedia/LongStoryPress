@@ -160,8 +160,8 @@ export default (config) => {
   );
 
   app.use("/lsp-api/flushcache", (req, res) => {
-    new NodeCache().flush();
-    res.send("cache flushed");
+    new NodeCache().flushAll();
+    res.json("cache flushed");
   });
 
   app.use((req, res, next) => {
