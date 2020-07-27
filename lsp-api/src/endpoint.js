@@ -1,11 +1,54 @@
-import express from "express";
-import fetch from "isomorphic-fetch";
-import { deepFilter, objectToQueryString } from "LSP/utils/helpers";
-import cacheService from "./cacheService";
+const express = require("express");
+const fetch = require("isomorphic-fetch");
+const cacheService = require("./cacheService");
 
 const devMode = process.env.NODE_ENV === "development";
 
-export default ({
+/**
+ *
+ * @param {*} obj
+ *
+ * @returns {boolean} if the object is empty
+ *
+ */
+const isEmptyObject = (obj) =>
+  !!(Object.entries(obj)?.length === 0 && obj.constructor === Object);
+
+/**
+ *
+ * @param {object} obj
+ *
+ * @returns {object} a copy of the object without empty values
+ *
+ */
+const deepFilter = (obj) => {
+  const newObj = {};
+  for (const [key, value] of Object.entries(obj)) {
+    // don't filter falsey values like 0 and false
+    if (typeof value === "undefined" || value === "" || value === null) {
+      continue;
+    }
+    // this works for arrays too
+    if (typeof value === "object") {
+      const objValue = deepFilter(value);
+      if (isEmptyObject(objValue)) {
+        continue;
+      }
+    }
+    newObj[key] = value;
+  }
+  return newObj;
+};
+
+const objectToQueryString = (queryObject) =>
+  !isEmptyObject(queryObject)
+    ? `?${Object.keys(queryObject)
+        .filter((key) => queryObject[key])
+        .map((key) => `${key}=${queryObject[key]}`)
+        .join("&")}`
+    : "";
+
+module.exports = ({
   type,
   path,
   byQuery = true,

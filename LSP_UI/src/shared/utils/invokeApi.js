@@ -1,5 +1,6 @@
 import fetch from "isomorphic-fetch";
 import regeneratorRuntime from "regenerator-runtime";
+import { objectToQueryString } from "./helpers";
 
 const apiRoot =
   process.env.NODE_ENV !== "production"
@@ -12,24 +13,24 @@ const invokeApi = async ({
   headers = {},
   options = {},
   query = "",
+  restArgs = {},
   body,
   noReturn = false,
-  props
+  props,
 }) => {
   const slash = "/" === path[0] ? "" : "/";
   body = body ? JSON.stringify(body) : body;
   headers = new Headers({
     ...headers,
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
   });
   const requestOptions = {
     method,
     headers,
     body,
-    ...options
+    ...options,
   };
-  // auth() && headers.append("Authorization", auth().token);
-  const endpoint = apiRoot + slash + path + query;
+  const endpoint = apiRoot + slash + path + query + objectToQueryString(restArgs);
   try {
     const res = await fetch(endpoint, requestOptions);
     if (200 !== res.status) {

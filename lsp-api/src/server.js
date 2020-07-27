@@ -1,14 +1,14 @@
-import endpoint from "./endpoint";
-import compression from "compression";
-import helmet from "helmet";
-import bodyParser from "body-parser";
-import cors from "cors";
-import timeout from "connect-timeout";
-import cookieParser from "cookie-parser";
-import express from "express";
-import path from "path";
-import chalk from "chalk";
-import NodeCache from "node-cache";
+const endpoint = require("./endpoint");
+const compression = require("compression");
+const helmet = require("helmet");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const timeout = require("connect-timeout");
+const cookieParser = require("cookie-parser");
+const express = require("express");
+const path = require("path");
+const chalk = require("chalk");
+const NodeCache = require("node-cache");
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = "production";
 const devMode = process.env.NODE_ENV !== "production";
@@ -20,7 +20,7 @@ require("dotenv").config({
 
 const app = express();
 
-export default (config) => {
+module.exports = (config) => {
   app.set("trust proxy", 1);
   app.use(cookieParser());
   app.use(helmet());

@@ -10,20 +10,16 @@ const isomorphic = (WC) => (props) => {
   useEffect(() => {
     if (__isBrowser__) {
       delete window?.__INITIAL_DATA__;
+      (async () => {
+          setData(
+            await props.fetchInitialData({
+              slug,
+              query: location.search,
+            })
+          );
+      })();
     }
-    (async () => {
-      console.log(data)
-      if ((data && slug !== data?.head?.slug) || !data) {
-        setData(
-          await props.fetchInitialData({
-            slug,
-            query: location.search,
-          })
-        );
-      }
-    })();
-    // return () => setData({});
-  }, [location]);
+  }, []);
   return <WC {...props} data={data} />;
 };
 export default isomorphic;

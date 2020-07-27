@@ -95,16 +95,12 @@ app.get("*", async (req, res) => {
   const manifest = await fetch(
     `${process.env.LSP_URL_PROTOCOL}${manifestPath}`
   );
-
   const assets = await manifest.json();
-
   const clsResponse = await fetch(colorsJSON);
-
   const colors = await clsResponse.json();
   const main = filterManifest(assets, /^(?=main~).+?\.js$/, "script");
   const bundles = filterManifest(assets, /^(?!main~).+?\.js$/, "script");
   const styles = filterManifest(assets, /.+?\.css$/, "link");
-
   const data = await getContent;
   const context = { data };
   const metaImg =
